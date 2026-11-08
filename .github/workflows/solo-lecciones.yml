@@ -1,0 +1,49 @@
+# Los PR que llegan de un fork solo pueden añadir lecciones: texto e imágenes pequeñas dentro de lecciones/.
+# También comprueba la firma DCO de cada commit. No fusiona nada: solo marca el PR en rojo si se sale de la regla. La fusión la hace siempre el mantenedor.
+name: Solo lecciones
+
+on: pull_request
+
+permissions:
+  contents: read
+
+jobs:
+  comprobar:
+    if: github.event.pull_request.head.repo.full_name != github.repository
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Solo texto e imágenes dentro de lecciones/
+        env:
+          BASE: ${{ github.event.pull_request.base.sha }}
+          HEAD: ${{ github.event.pull_request.head.sha }}
+        run: |
+          fallos=0
+          while IFS=$'\t' read -r estado ruta; do
+            case "$ruta" in
+              lecciones/PLANTILLA.md)
+                echo "::error file=$ruta::La plantilla solo la cambia el mantenedor"; fallos=1 ;;
+              lecciones/*/leccion.md) ;;
+              lecciones/*/*.jpg|lecciones/*/*.jpeg|lecciones/*/*.png)
+                if [ "$estado" != "D" ] && [ "$(stat -c %s "$ruta")" -gt 204800 ]; then
+                  echo "::error file=$ruta::La imagen pasa de 200 KB"; fallos=1
+                fi ;;
+              *)
+                echo "::error file=$ruta::Fuera de lecciones/ o tipo de archivo no admitido"; fallos=1 ;;
+            esac
+          done < <(git diff --name-status --no-renames "$BASE...$HEAD")
+          exit $fallos
+      - name: Cada commit lleva Signed-off-by (DCO)
+        env:
+          BASE: ${{ github.event.pull_request.base.sha }}
+          HEAD: ${{ github.event.pull_request.head.sha }}
+        run: |
+          fallos=0
+          for c in $(git rev-list --no-merges "$BASE..$HEAD"); do
+            if ! git log -1 --format=%B "$c" | grep -qE '^Signed-off-by: .+ <[^>]+@[^>]+>$'; then
+              echo "::error::El commit ${c:0:7} no lleva Signed-off-by. Usa git commit -s (ver CONTRIBUTING.md)"; fallos=1
+            fi
+          done
+          exit $fallos

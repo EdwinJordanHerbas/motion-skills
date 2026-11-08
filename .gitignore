@@ -1,0 +1,7 @@
+# Renders y cachés de las pruebas: no se suben
+*.mp4
+*.mov
+pruebas/resultados/**/*.jpg
+.cache-elevenlabs/
+node_modules/
+out/

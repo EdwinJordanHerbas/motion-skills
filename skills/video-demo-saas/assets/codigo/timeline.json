@@ -1,0 +1,117 @@
+{
+  "fps": 30,
+  "frames": 988,
+  "bpm": 120,
+  "beats": {},
+  "music": {
+    "note": "No voice. Sections of at least 3 s (API minimum). Chat 0-131, brand 131, build under the racing feed 419-509, the wow on 509, review and report from 613, lift for the call to action, final hit on the closing brand (FIN = 940). The take is cut at frame 988 (FIN + 48).",
+    "styles": [
+      "modern electronic",
+      "clean product demo music",
+      "warm synths",
+      "tight light drums",
+      "instrumental",
+      "120 BPM"
+    ],
+    "sections": [
+      {
+        "name": "intro",
+        "from": 0,
+        "to": 131,
+        "tags": [
+          "soft plucked synth arpeggio",
+          "light shaker",
+          "curious and playful",
+          "no kick drum"
+        ]
+      },
+      {
+        "name": "groove",
+        "from": 131,
+        "to": 419,
+        "tags": [
+          "soft impact on the first downbeat",
+          "warm bass enters",
+          "steady groove",
+          "light drums",
+          "confident and clean"
+        ]
+      },
+      {
+        "name": "build",
+        "from": 419,
+        "to": 509,
+        "tags": [
+          "building intensity",
+          "faster arpeggio",
+          "snare build",
+          "rising anticipation"
+        ]
+      },
+      {
+        "name": "wow",
+        "from": 509,
+        "to": 613,
+        "tags": [
+          "full energy on the first downbeat",
+          "wide bright synth chords",
+          "punchy drums",
+          "euphoric"
+        ]
+      },
+      {
+        "name": "steady",
+        "from": 613,
+        "to": 777,
+        "tags": [
+          "steady groove",
+          "a little lighter",
+          "confident"
+        ]
+      },
+      {
+        "name": "lift",
+        "from": 777,
+        "to": 940,
+        "tags": [
+          "uplifting",
+          "brighter synths",
+          "gentle build"
+        ]
+      },
+      {
+        "name": "outro",
+        "from": 940,
+        "to": 1030,
+        "tags": [
+          "decisive button ending",
+          "final staccato hit on the downbeat, then silence"
+        ]
+      }
+    ],
+    "end": 940
+  },
+  "vo": [],
+  "cues": [
+    {
+      "f": 437,
+      "kind": "scroll"
+    },
+    {
+      "f": 509,
+      "kind": "asombro"
+    },
+    {
+      "f": 517,
+      "kind": "giro"
+    },
+    {
+      "f": 555,
+      "kind": "monedas"
+    },
+    {
+      "f": 104,
+      "kind": "magia"
+    }
+  ]
+}

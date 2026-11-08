@@ -1,0 +1,135 @@
+{
+  "nota": "Receta del paquete de efectos de la plantilla. Genéralo con scripts/paquete_efectos.py y tu clave de ElevenLabs: el paquete no se distribuye, porque los términos de ElevenLabs no permiten repartir lo generado. El tecleo se corta en 8 teclas (tecla0-tecla7). Familias y cribas en references/sonido.md.",
+  "modelo": "eleven_text_to_sound_v3",
+  "efectos": {
+    "ui-click": {
+      "prompt": "Soft modern mouse click on a trackpad, short clean interface click, no reverb, one-shot",
+      "segundos": 0.5,
+      "influencia": 0.7,
+      "familia": "tick"
+    },
+    "slice": {
+      "prompt": "Fast crisp digital slice swish, a clean blade cutting through air, short and bright, no metallic ring, one-shot",
+      "segundos": 0.6,
+      "influencia": 0.5,
+      "familia": "air"
+    },
+    "card-in": {
+      "prompt": "Short soft airy whoosh of a card sliding in, modern app interface transition, gentle, no low rumble, one-shot",
+      "segundos": 0.8,
+      "influencia": 0.45,
+      "familia": "air"
+    },
+    "zoom": {
+      "prompt": "Smooth airy camera zoom-in whoosh, modern motion graphics transition, clean, no low rumble, one-shot",
+      "segundos": 1.0,
+      "influencia": 0.45,
+      "familia": "air"
+    },
+    "pop": {
+      "prompt": "Tiny soft bubbly interface pop, short and gentle, clean, one-shot",
+      "segundos": 0.4,
+      "influencia": 0.6,
+      "familia": "tick"
+    },
+    "success": {
+      "prompt": "Soft pleasant two-note interface confirmation chime, warm and short, clean, no reverb tail, one-shot",
+      "segundos": 0.8,
+      "influencia": 0.6,
+      "familia": "tick"
+    },
+    "rechazo": {
+      "prompt": "Soft muted two-note descending interface notice tone, gentle and calm, short, clean, no reverb, one-shot",
+      "segundos": 0.6,
+      "influencia": 0.6,
+      "familia": "tick"
+    },
+    "sello": {
+      "prompt": "Firm soft rubber stamp pressed on paper on a desk, short and clean, one-shot",
+      "segundos": 0.5,
+      "influencia": 0.6,
+      "familia": "tick"
+    },
+    "publicado": {
+      "prompt": "Soft short friendly phone notification blip, modern app, clean, no reverb tail, one-shot",
+      "segundos": 0.5,
+      "influencia": 0.6,
+      "familia": "tick"
+    },
+    "enviar": {
+      "prompt": "Short soft whoosh of a chat message being sent in a modern messaging app, light and clean, one-shot",
+      "segundos": 0.5,
+      "influencia": 0.6,
+      "familia": "tick"
+    },
+    "soltar": {
+      "prompt": "Soft muffled thump of a file dropped into an app upload area, short clean interface sound, gentle, one-shot",
+      "segundos": 0.5,
+      "influencia": 0.6,
+      "familia": "tick"
+    },
+    "transicion": {
+      "prompt": "Smooth wide airy whoosh for a scene transition in a modern product video, clean, soft attack, no low rumble, one-shot",
+      "segundos": 1.0,
+      "influencia": 0.5,
+      "familia": "air"
+    },
+    "paper-plane": {
+      "prompt": "Quick paper fold crinkle followed by a light airy whoosh of a paper plane flying away, clean, one-shot",
+      "segundos": 1.2,
+      "influencia": 0.5,
+      "familia": "air"
+    },
+    "logo-hit": {
+      "prompt": "Deep soft cinematic impact with a short warm tail, modern logo reveal hit, clean, not boomy, one-shot",
+      "segundos": 1.2,
+      "influencia": 0.5,
+      "familia": "hit"
+    },
+    "magia": {
+      "prompt": "Magical sparkle shimmer, a quick bright twinkle of tiny bells and glitter over a soft airy whoosh, clean, short, one-shot",
+      "segundos": 0.9,
+      "influencia": 0.5,
+      "familia": "air",
+      "max_agudos": 0.75
+    },
+    "monedas": {
+      "prompt": "A burst of gold coins tumbling and clinking together, bright cheerful cascade, close and clean, no music, one-shot",
+      "segundos": 1.6,
+      "influencia": 0.5,
+      "familia": "swell",
+      "max_activa": 1.8,
+      "max_agudos": 0.75
+    },
+    "giro": {
+      "prompt": "Fast swirling whoosh of a phone flipping in the air, quick spin swish, clean modern motion graphics, no low rumble, one-shot",
+      "segundos": 0.8,
+      "influencia": 0.5,
+      "familia": "air"
+    },
+    "scroll": {
+      "prompt": "Rapid swipe flicks of a phone feed scrolling faster and faster, airy clean whooshes that speed up, modern interface, no music",
+      "segundos": 2.5,
+      "influencia": 0.45,
+      "familia": "swell",
+      "max_activa": 2.8
+    },
+    "asombro": {
+      "prompt": "Bright cinematic impact with a shimmering sparkle tail, a wow reveal moment in a product video, clean, not boomy, one-shot",
+      "segundos": 1.3,
+      "influencia": 0.5,
+      "familia": "hit",
+      "max_activa": 1.3,
+      "max_agudos": 0.65
+    },
+    "teclado": {
+      "prompt": "Fast natural typing on a quiet modern laptop keyboard, about fourteen crisp separate key presses with tiny pauses, close and dry, no music, no voice",
+      "segundos": 3.0,
+      "influencia": 0.6,
+      "familia": "swell",
+      "max_activa": 3.2,
+      "max_agudos": 0.6,
+      "cortar": 8
+    }
+  }
+}

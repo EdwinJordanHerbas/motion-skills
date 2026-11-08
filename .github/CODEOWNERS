@@ -1,0 +1,4 @@
+# Todo el repositorio lo revisa el mantenedor. Con la regla de rama «Require review from Code Owners»
+# activada en main, nada se fusiona sin su aprobación, tampoco las lecciones.
+*               @EdwinJordanHerbas
+/lecciones/     @EdwinJordanHerbas

@@ -1,0 +1,16 @@
+{
+  "name": "edwinjordanherbas",
+  "description": "Skills de Edwin Jordan Herbas para hacer vídeos de producto con Remotion y una IA.",
+  "owner": {
+    "name": "Edwin Jordan Herbas"
+  },
+  "plugins": [
+    {
+      "name": "video-demo-saas",
+      "source": "./",
+      "description": "Plantilla de vídeo demo vertical de un SaaS con Remotion y three.js: dispositivos 3D con la interfaz real, rótulos legibles sin sonido y sonido sin silencios.",
+      "category": "video",
+      "tags": ["remotion", "threejs", "video", "elevenlabs", "español"]
+    }
+  ]
+}

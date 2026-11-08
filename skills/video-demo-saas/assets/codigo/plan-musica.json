@@ -1,0 +1,197 @@
+{
+  "chunks": [
+    {
+      "text": "[intro]",
+      "duration_ms": 4367,
+      "positive_styles": [
+        "modern electronic",
+        "clean product demo music",
+        "warm synths",
+        "tight light drums",
+        "instrumental",
+        "120 BPM",
+        "soft plucked synth arpeggio",
+        "light shaker",
+        "curious and playful",
+        "no kick drum"
+      ],
+      "negative_styles": [
+        "vocals",
+        "lyrics",
+        "humming",
+        "choir",
+        "spoken word",
+        "long intro",
+        "fade out",
+        "long reverb tail",
+        "riser",
+        "EDM drop"
+      ]
+    },
+    {
+      "text": "[groove]",
+      "duration_ms": 9600,
+      "positive_styles": [
+        "modern electronic",
+        "clean product demo music",
+        "warm synths",
+        "tight light drums",
+        "instrumental",
+        "120 BPM",
+        "soft impact on the first downbeat",
+        "warm bass enters",
+        "steady groove",
+        "light drums",
+        "confident and clean"
+      ],
+      "negative_styles": [
+        "vocals",
+        "lyrics",
+        "humming",
+        "choir",
+        "spoken word",
+        "long intro",
+        "fade out",
+        "long reverb tail",
+        "riser",
+        "EDM drop"
+      ]
+    },
+    {
+      "text": "[build]",
+      "duration_ms": 3000,
+      "positive_styles": [
+        "modern electronic",
+        "clean product demo music",
+        "warm synths",
+        "tight light drums",
+        "instrumental",
+        "120 BPM",
+        "building intensity",
+        "faster arpeggio",
+        "snare build",
+        "rising anticipation"
+      ],
+      "negative_styles": [
+        "vocals",
+        "lyrics",
+        "humming",
+        "choir",
+        "spoken word",
+        "long intro",
+        "fade out",
+        "long reverb tail",
+        "riser",
+        "EDM drop"
+      ]
+    },
+    {
+      "text": "[wow]",
+      "duration_ms": 3467,
+      "positive_styles": [
+        "modern electronic",
+        "clean product demo music",
+        "warm synths",
+        "tight light drums",
+        "instrumental",
+        "120 BPM",
+        "full energy on the first downbeat",
+        "wide bright synth chords",
+        "punchy drums",
+        "euphoric"
+      ],
+      "negative_styles": [
+        "vocals",
+        "lyrics",
+        "humming",
+        "choir",
+        "spoken word",
+        "long intro",
+        "fade out",
+        "long reverb tail",
+        "riser",
+        "EDM drop"
+      ]
+    },
+    {
+      "text": "[steady]",
+      "duration_ms": 5467,
+      "positive_styles": [
+        "modern electronic",
+        "clean product demo music",
+        "warm synths",
+        "tight light drums",
+        "instrumental",
+        "120 BPM",
+        "steady groove",
+        "a little lighter",
+        "confident"
+      ],
+      "negative_styles": [
+        "vocals",
+        "lyrics",
+        "humming",
+        "choir",
+        "spoken word",
+        "long intro",
+        "fade out",
+        "long reverb tail",
+        "riser",
+        "EDM drop"
+      ]
+    },
+    {
+      "text": "[lift]",
+      "duration_ms": 5433,
+      "positive_styles": [
+        "modern electronic",
+        "clean product demo music",
+        "warm synths",
+        "tight light drums",
+        "instrumental",
+        "120 BPM",
+        "uplifting",
+        "brighter synths",
+        "gentle build"
+      ],
+      "negative_styles": [
+        "vocals",
+        "lyrics",
+        "humming",
+        "choir",
+        "spoken word",
+        "long intro",
+        "fade out",
+        "long reverb tail",
+        "riser",
+        "EDM drop"
+      ]
+    },
+    {
+      "text": "[outro]",
+      "duration_ms": 3000,
+      "positive_styles": [
+        "modern electronic",
+        "clean product demo music",
+        "warm synths",
+        "tight light drums",
+        "instrumental",
+        "120 BPM",
+        "decisive button ending",
+        "final staccato hit on the downbeat, then silence"
+      ],
+      "negative_styles": [
+        "vocals",
+        "lyrics",
+        "humming",
+        "choir",
+        "spoken word",
+        "long intro",
+        "fade out",
+        "long reverb tail",
+        "riser",
+        "EDM drop"
+      ]
+    }
+  ]
+}

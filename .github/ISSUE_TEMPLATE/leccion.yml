@@ -1,0 +1,76 @@
+name: Lección
+description: Cuenta qué falló al hacer un vídeo con la skill y cómo se arregló. Sin datos de clientes.
+title: "Lección: "
+labels: ["leccion"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Gracias por compartir. **Todo lo que pongas aquí es público** y queda en el historial aunque se borre después.
+
+        No incluyas datos ni material de clientes: ni marcas, ni nombres de personas, ni textos, precios, pantallas o logotipos reales, ni rutas locales, correos, claves o identificadores de voces. Describe el producto de forma genérica («una app de reservas»).
+
+        Si tu IA ya escribió la lección con la plantilla, pega cada apartado en su campo.
+  - type: input
+    id: version
+    attributes:
+      label: Versión de la skill
+      description: La de `metadata.version` en SKILL.md.
+      placeholder: "0.1.0"
+    validations:
+      required: true
+  - type: input
+    id: agente
+    attributes:
+      label: Agente y modelo
+      placeholder: "Claude Code con Opus 5.5"
+    validations:
+      required: true
+  - type: textarea
+    id: pedido
+    attributes:
+      label: Qué se pidió
+      description: Una o dos frases genéricas, por ejemplo el tipo de vídeo, la duración y si lleva voz.
+    validations:
+      required: true
+  - type: textarea
+    id: fallo
+    attributes:
+      label: Qué falló
+      description: El síntoma tal como se vio o se oyó, con el fotograma o el segundo.
+    validations:
+      required: true
+  - type: textarea
+    id: arreglo
+    attributes:
+      label: Cómo se arregló
+      description: La causa y el cambio. Un fragmento de código mínimo si ayuda.
+    validations:
+      required: true
+  - type: textarea
+    id: regla
+    attributes:
+      label: Regla propuesta
+      description: Una frase que pueda entrar en la skill, del tipo «Haz X, porque Y».
+    validations:
+      required: true
+  - type: textarea
+    id: fotogramas
+    attributes:
+      label: Fotogramas antes y después (opcional)
+      description: Arrastra aquí dos imágenes pequeñas, de 480 px de alto como mucho, sin pantallas ni textos reales de un cliente.
+    validations:
+      required: false
+  - type: checkboxes
+    id: comprobacion
+    attributes:
+      label: Comprobación
+      options:
+        - label: No hay nombres de marcas, clientes ni personas.
+          required: true
+        - label: No hay textos, precios, pantallas ni logotipos reales de un cliente.
+          required: true
+        - label: No hay rutas locales, correos, claves ni identificadores de voces.
+          required: true
+        - label: La escribí yo o tengo derecho a compartirla, y la aporto bajo la licencia del repositorio (Apache-2.0), como dice el DCO 1.1 (developercertificate.org).
+          required: true
