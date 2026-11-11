@@ -1,4 +1,4 @@
-# Los PR que llegan de un fork solo pueden añadir lecciones: texto e imágenes pequeñas dentro de lecciones/.
+# Los PR que llegan de un fork solo pueden añadir lecciones: texto e imágenes pequeñas dentro de lecciones/<skill>/.
 # También comprueba la firma DCO de cada commit. No fusiona nada: solo marca el PR en rojo si se sale de la regla. La fusión la hace siempre el mantenedor.
 name: Solo lecciones
 
@@ -25,13 +25,13 @@ jobs:
             case "$ruta" in
               lecciones/PLANTILLA.md)
                 echo "::error file=$ruta::La plantilla solo la cambia el mantenedor"; fallos=1 ;;
-              lecciones/*/leccion.md) ;;
-              lecciones/*/*.jpg|lecciones/*/*.jpeg|lecciones/*/*.png)
+              lecciones/*/*/leccion.md) ;;
+              lecciones/*/*/*.jpg|lecciones/*/*/*.jpeg|lecciones/*/*/*.png)
                 if [ "$estado" != "D" ] && [ "$(stat -c %s "$ruta")" -gt 204800 ]; then
                   echo "::error file=$ruta::La imagen pasa de 200 KB"; fallos=1
                 fi ;;
               *)
-                echo "::error file=$ruta::Fuera de lecciones/ o tipo de archivo no admitido"; fallos=1 ;;
+                echo "::error file=$ruta::Fuera de lecciones/<skill>/<fecha>-<tema>/ o tipo de archivo no admitido"; fallos=1 ;;
             esac
           done < <(git diff --name-status --no-renames "$BASE...$HEAD")
           exit $fallos

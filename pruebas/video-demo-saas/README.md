@@ -28,7 +28,7 @@ uv run scripts/zonas.py final.mp4 zonas.jpg 0,90,180,270,360,450,540,630,720,810
 
 ## Hoja de resultados
 
-Una fila por encargo y versión en `pruebas/resultados/<versión>.md`, sin vídeos ni imágenes en el repositorio:
+Una fila por encargo y versión en `pruebas/video-demo-saas/resultados/<versión>.md`, sin vídeos ni imágenes en el repositorio:
 
 | Encargo | Versión | Agente y modelo | Duración | LUFS | Pico (dBTP) | Tramos < -29 | Mediana | p10 | Fallos vistos en la hoja | Vueltas hasta entregar |
 |---|---|---|---|---|---|---|---|---|---|---|

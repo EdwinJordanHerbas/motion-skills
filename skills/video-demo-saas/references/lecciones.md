@@ -32,31 +32,31 @@ Enseña el texto completo y la lista de imágenes, y pregunta una sola vez, en u
 
 ## Compartir, solo con un sí
 
-El repositorio público es `EdwinJordanHerbas/video-demo-saas`.
+El repositorio público es `EdwinJordanHerbas/motion-skills`, con una carpeta de lecciones por skill: las de esta van en `lecciones/video-demo-saas/`.
 
 **Con `gh` instalado y con sesión iniciada** (`gh auth status` lo dice):
 
 - Sin imágenes, como issue:
   ```
-  gh issue create --repo EdwinJordanHerbas/video-demo-saas --title "Lección: <tema>" --body-file lecciones/<AAAA-MM-DD>-<tema>/leccion.md
+  gh issue create --repo EdwinJordanHerbas/motion-skills --title "Lección (video-demo-saas): <tema>" --body-file lecciones/<AAAA-MM-DD>-<tema>/leccion.md
   ```
 - Con imágenes, como PR desde un fork, en una carpeta temporal fuera del proyecto del usuario:
   ```
-  gh repo fork EdwinJordanHerbas/video-demo-saas --clone=false
-  gh repo clone <usuario>/video-demo-saas <temporal>/video-demo-saas -- --depth 1
-  cd <temporal>/video-demo-saas
+  gh repo fork EdwinJordanHerbas/motion-skills --clone=false
+  gh repo clone <usuario>/motion-skills <temporal>/motion-skills -- --depth 1
+  cd <temporal>/motion-skills
   git switch -c leccion/<AAAA-MM-DD>-<tema>
-  # copia la carpeta de la lección a lecciones/<AAAA-MM-DD>-<tema>/ (solo leccion.md, antes.jpg y despues.jpg)
-  git add lecciones/<AAAA-MM-DD>-<tema>
-  git commit -m "Lección: <tema>"
+  # copia la carpeta de la lección a lecciones/video-demo-saas/<AAAA-MM-DD>-<tema>/ (solo leccion.md, antes.jpg y despues.jpg)
+  git add lecciones/video-demo-saas/<AAAA-MM-DD>-<tema>
+  git commit -s -m "Lección (video-demo-saas): <tema>"
   git push -u origin leccion/<AAAA-MM-DD>-<tema>
-  gh pr create --repo EdwinJordanHerbas/video-demo-saas --title "Lección: <tema>" --body-file lecciones/<AAAA-MM-DD>-<tema>/leccion.md
+  gh pr create --repo EdwinJordanHerbas/motion-skills --title "Lección (video-demo-saas): <tema>" --body-file lecciones/<AAAA-MM-DD>-<tema>/leccion.md
   ```
   Si el usuario prefiere no hacer un fork, abre el issue sin imágenes y dile que puede arrastrarlas al issue desde el navegador.
 
 **Sin `gh`**, dale el enlace del formulario y dile que pegue el texto y arrastre las imágenes:
 
-`https://github.com/EdwinJordanHerbas/video-demo-saas/issues/new?template=leccion.yml`
+`https://github.com/EdwinJordanHerbas/motion-skills/issues/new?template=leccion.yml` (elige `video-demo-saas` en «Skill»)
 
 No metas el contenido de la lección en el enlace.
 

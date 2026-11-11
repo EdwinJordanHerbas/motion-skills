@@ -11,6 +11,14 @@ body:
         No incluyas datos ni material de clientes: ni marcas, ni nombres de personas, ni textos, precios, pantallas o logotipos reales, ni rutas locales, correos, claves o identificadores de voces. Describe el producto de forma genérica («una app de reservas»).
 
         Si tu IA ya escribió la lección con la plantilla, pega cada apartado en su campo.
+  - type: dropdown
+    id: skill
+    attributes:
+      label: Skill
+      options:
+        - video-demo-saas
+    validations:
+      required: true
   - type: input
     id: version
     attributes:

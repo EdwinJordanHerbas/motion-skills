@@ -1,6 +1,6 @@
 {
   "name": "edwinjordanherbas",
-  "description": "Skills de Edwin Jordan Herbas para hacer vídeos de producto con Remotion y una IA.",
+  "description": "Skills de motion graphics de Edwin Jordan Herbas: vídeos verticales de producto con Remotion y three.js, para tu IA.",
   "owner": {
     "name": "Edwin Jordan Herbas"
   },
@@ -8,7 +8,17 @@
     {
       "name": "video-demo-saas",
       "source": "./",
-      "description": "Plantilla de vídeo demo vertical de un SaaS con Remotion y three.js: dispositivos 3D con la interfaz real, rótulos legibles sin sonido y sonido sin silencios.",
+      "strict": false,
+      "skills": ["./skills/video-demo-saas"],
+      "description": "Plantilla y método para hacer vídeos demo verticales de un SaaS con Remotion y three.js: dispositivos 3D con la interfaz real, rótulos legibles sin sonido, efectos y música de ElevenLabs sin silencios y revisiones medidas.",
+      "version": "0.1.0",
+      "author": {
+        "name": "Edwin Jordan Herbas"
+      },
+      "homepage": "https://github.com/EdwinJordanHerbas/motion-skills/tree/main/skills/video-demo-saas",
+      "repository": "https://github.com/EdwinJordanHerbas/motion-skills",
+      "license": "Apache-2.0",
+      "keywords": ["remotion", "threejs", "video", "saas", "plantilla", "elevenlabs", "español"],
       "category": "video",
       "tags": ["remotion", "threejs", "video", "elevenlabs", "español"]
     }

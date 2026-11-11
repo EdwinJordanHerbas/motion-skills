@@ -1,10 +1,10 @@
 # Cómo aportar
 
-Esta skill mejora con casos reales. Si al hacer un vídeo algo falló y se arregló, esa lección le sirve a la siguiente persona. Compartirla es **opcional**: la skill nunca envía nada sin tu sí, y no hay telemetría.
+Estas skills mejoran con casos reales. Si al hacer un vídeo algo falló y se arregló, esa lección le sirve a la siguiente persona. Compartirla es **opcional**: ninguna skill envía nada sin tu sí, y no hay telemetría.
 
 ## Qué se acepta
 
-- **Lecciones**: texto e imágenes pequeñas dentro de `lecciones/<AAAA-MM-DD>-<tema>/`, con la plantilla [`lecciones/PLANTILLA.md`](lecciones/PLANTILLA.md).
+- **Lecciones**: texto e imágenes pequeñas dentro de `lecciones/<skill>/<AAAA-MM-DD>-<tema>/`, en la carpeta de la skill a la que se refieren, con la plantilla [`lecciones/PLANTILLA.md`](lecciones/PLANTILLA.md).
 - **Nada más por PR.** El código, `SKILL.md`, `references/`, los scripts y los sonidos los cambia solo el mantenedor. Si quieres proponer un cambio ahí, abre un issue y descríbelo.
 
 Una comprobación automática marca en rojo los PR de forks que tocan algo fuera de `lecciones/` o traen imágenes de más de 200 KB.
@@ -12,7 +12,7 @@ Una comprobación automática marca en rojo los PR de forks que tocan algo fuera
 ## Cómo enviar una lección
 
 - **Con tu IA**: al terminar un vídeo, la skill escribe la lección en tu proyecto y te pregunta si quieres compartirla. Solo si dices que sí, abre un issue o un PR con `gh` (la CLI de GitHub). Si no tienes `gh`, te da el enlace del formulario.
-- **A mano**: rellena el [formulario de lección](https://github.com/EdwinJordanHerbas/video-demo-saas/issues/new?template=leccion.yml), o abre un PR que añada tu carpeta a `lecciones/`.
+- **A mano**: rellena el [formulario de lección](https://github.com/EdwinJordanHerbas/motion-skills/issues/new?template=leccion.yml), o abre un PR que añada tu carpeta a `lecciones/<skill>/`.
 
 Una lección por issue o por PR.
 
@@ -26,8 +26,8 @@ Una lección por issue o por PR.
 
 1. Lee cada lección a mano. **Nada se fusiona solo**: todo pasa por su revisión.
 2. Agrupa las lecciones que apuntan a lo mismo.
-3. Cuando una regla se repite, la escribe en la skill con sus palabras y saca una versión nueva (`metadata.version` en `SKILL.md` y `version` en `.claude-plugin/plugin.json`), citando los issues o PR que la motivaron.
-4. Mantiene `lecciones/PLANTILLA.md` y `skills/video-demo-saas/assets/leccion.md` idénticas.
+3. Cuando una regla se repite, la escribe en la skill con sus palabras y saca una versión nueva (`metadata.version` en su `SKILL.md` y `version` de su plugin en `.claude-plugin/marketplace.json`), citando los issues o PR que la motivaron.
+4. Mantiene `lecciones/PLANTILLA.md` y el `assets/leccion.md` de cada skill idénticos.
 
 ## Términos de las aportaciones
 

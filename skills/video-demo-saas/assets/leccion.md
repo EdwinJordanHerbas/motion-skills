@@ -6,6 +6,7 @@ pantallas o logotipos reales, ni rutas locales, correos, claves o identificadore
 Describe el producto de forma genérica («una app de reservas»).
 -->
 
+- **Skill:** <el `name` de SKILL.md, por ejemplo video-demo-saas>
 - **Versión de la skill:** <la de `metadata.version` en SKILL.md, por ejemplo 0.1.0>
 - **Agente y modelo:** <por ejemplo, Claude Code con Opus 5.5 o Codex con su modelo>
 - **Fecha:** <AAAA-MM-DD>

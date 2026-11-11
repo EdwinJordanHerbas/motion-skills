@@ -1,16 +1,16 @@
 <!--
-Este repositorio solo acepta lecciones: texto e imágenes dentro de lecciones/.
+Este repositorio solo acepta lecciones: texto e imágenes dentro de lecciones/<skill>/.
 El código, SKILL.md y references/ los cambia solo el mantenedor. Si propones un cambio ahí,
 abre un issue y descríbelo.
 -->
 
 ## Lección
 
-<!-- Tema en una línea. El contenido va en lecciones/<AAAA-MM-DD>-<tema>/leccion.md -->
+<!-- Skill y tema en una línea. El contenido va en lecciones/<skill>/<AAAA-MM-DD>-<tema>/leccion.md -->
 
 ## Comprobación
 
-- [ ] Solo añado archivos dentro de `lecciones/<AAAA-MM-DD>-<tema>/`: `leccion.md` y, si acaso, `antes.jpg` y `despues.jpg` (o `.png`).
+- [ ] Solo añado archivos dentro de `lecciones/<skill>/<AAAA-MM-DD>-<tema>/`: `leccion.md` y, si acaso, `antes.jpg` y `despues.jpg` (o `.png`).
 - [ ] Las imágenes miden 480 px de alto como mucho y menos de 200 KB cada una.
 - [ ] No hay nombres de marcas, clientes ni personas.
 - [ ] No hay textos, precios, pantallas ni logotipos reales de un cliente.
