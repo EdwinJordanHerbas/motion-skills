@@ -11,7 +11,7 @@
       "strict": false,
       "skills": ["./skills/video-demo-saas"],
       "description": "Plantilla y método para hacer vídeos demo verticales de un SaaS con Remotion y three.js: dispositivos 3D con la interfaz real, rótulos legibles sin sonido, efectos y música de ElevenLabs sin silencios y revisiones medidas.",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "author": {
         "name": "Edwin Jordan Herbas"
       },

@@ -80,6 +80,9 @@ Mira la hoja de contacto de verdad, fotograma a fotograma, buscando cortes, fant
 | Un móvil tapa el rótulo de debajo mientras sale | El rótulo salía justo cuando el móvil se inclinaba y crecía sobre su línea | Que termine de salir antes de que empiece el movimiento: `out` unos 12 fotogramas antes |
 | Copias planas que asoman por encima de los móviles 3D | Cada pieza volaba hacia el sitio final de su móvil mientras el móvil subía desde abajo: unos 10 fotogramas con los dos a la vez, la pieza por encima | Que la pieza apunte todo el rato a la pantalla de su móvil donde está en ese fotograma (abajo antes de subir): se juntan al aterrizar. Después, fundido corto (4 fotogramas) siguiéndolo |
 | Fotogramas en blanco o «Chrome ran out of memory» | Tres lienzos WebGL grandes montados todo el vídeo, por cuatro pestañas | Margen justo, lienzos montados solo en su escena y `delayRender` de arranque soltado tras el primer dibujo |
+| Fotogramas en blanco seguidos en el render completo (los cuerpos 3D desaparecen y luego el fondo), que salen bien como `still` sueltos | Una tarjeta dentro de una pantalla proyectada (`Mapped`) entraba con `filter: blur()`, y en el fotograma en que el filtro pasaba a `undefined` la GPU perdía el contexto WebGL. El lienzo perdido se pinta blanco y tapa el fondo hasta que se desmonta. Solo pasa en secuencia, por eso los sueltos salen bien | Dentro de pantallas proyectadas, entradas sin `blur` (escala y opacidad). El componente del lienzo comprueba `gl.isContextLost()` y, si se pierde, para el render con `cancelRender`. Para aislarlo, renderiza el tramo con `--concurrency=1` y quita capas DOM una a una |
+| Sello «Ejemplo» ilegible en el móvil | Era de 16 px en la barra de una pantalla inventada: con el vídeo a 380 px de ancho se quedaba en 5 px, y la pantalla salía sin marcar | Sello en tinta llena con texto claro, de 28 px como mínimo. Comprueba todo lo que se lee reduciendo el fotograma a 380 px de ancho |
+| Un fondo con degradado radial suave hace anillos al comprimir | 8 bits no bastan para un degradado de 13 niveles en 900 px, y el códec los aplana | Grano fijo muy suave (`feTurbulence` con semilla, `mix-blend-mode: overlay`, opacidad 0,5) y render con `--crf=16` |
 
 ## Antes de entregar
 
@@ -87,6 +90,7 @@ Mira la hoja de contacto de verdad, fotograma a fotograma, buscando cortes, fant
 - [ ] `caja.py` en cada escena 3D → nunca toca el borde y deja el mismo margen que las tarjetas; `huecos.py` en el render final → sin fotogramas rotos.
 - [ ] Cada relevo de rótulos sin solapes, y cada rótulo completo.
 - [ ] Hoja de contacto completa revisada.
+- [ ] Todo lo que se lee (rótulos, sellos «Ejemplo», cifras) sigue legible con el fotograma reducido a 380 px de ancho.
 - [ ] `silencios.py` → ninguno; `medir.py` → volumen y pico dentro de objetivo.
 - [ ] Textos contra la fuente real, sin cifras inventadas y con los datos ficticios marcados.
 - [ ] Dominio y redes solo si existen.

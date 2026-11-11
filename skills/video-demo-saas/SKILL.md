@@ -4,7 +4,7 @@ description: Método para hacer vídeos demo verticales de un SaaS o servicio (1
 license: Apache-2.0
 compatibility: Proyecto Remotion 4 con three.js, Node.js, uv (Python 3.10+) y ffmpeg. El sonido con ElevenLabs es opcional y necesita red y una clave propia. Solo se ha probado en Windows.
 metadata:
-  version: "0.1.0"
+  version: "0.2.0"
 ---
 
 # Vídeo demo SaaS vertical
