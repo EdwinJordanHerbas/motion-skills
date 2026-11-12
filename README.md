@@ -4,6 +4,8 @@ Skills de motion graphics para tu IA, en español: vídeos verticales de product
 
 Siguen el formato abierto [Agent Skills](https://agentskills.io/specification), así que funcionan con Claude Code y con otros agentes compatibles.
 
+¿Prefieres no instalar nada? En [edwinjordan.neumorstudio.com](https://edwinjordan.neumorstudio.com) te hago el vídeo, en motion graphics y con tu marca.
+
 > El repositorio se llamaba `video-demo-saas`. La dirección vieja redirige aquí.
 
 ## Skills
