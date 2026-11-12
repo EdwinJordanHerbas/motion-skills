@@ -1,5 +1,5 @@
 {
-  "nota": "Receta del paquete de efectos de la plantilla. Genéralo con scripts/paquete_efectos.py y tu clave de ElevenLabs: el paquete no se distribuye, porque los términos de ElevenLabs no permiten repartir lo generado. El tecleo se corta en 8 teclas (tecla0-tecla7). Familias y cribas en references/sonido.md.",
+  "nota": "Receta del paquete de efectos: los 20 primeros son los de interfaz de la plantilla y los 14 siguientes, de objetos y ambiente (intro 3D, 0.3.0). Genéralo con scripts/paquete_efectos.py y tu clave de ElevenLabs: el paquete no se distribuye, porque los términos de ElevenLabs no permiten repartir lo generado. El tecleo se corta en 8 teclas (tecla0-tecla7). Familias y cribas en references/sonido.md.",
   "modelo": "eleven_text_to_sound_v3",
   "efectos": {
     "ui-click": {
@@ -130,6 +130,99 @@
       "max_activa": 3.2,
       "max_agudos": 0.6,
       "cortar": 8
+    },
+    "aire": {
+      "prompt": "Continuous soft airy wind movement, like a smooth camera gliding through open space, gentle steady whoosh texture, no tones, no rumble, seamless loop",
+      "segundos": 5,
+      "influencia": 0.45,
+      "familia": "bed",
+      "bucle": true,
+      "alargar_s": 40
+    },
+    "ambiente": {
+      "prompt": "Busy small restaurant dining room ambience, distant indistinct chatter, cutlery and plates clinking, slightly muffled, no music, no clear words",
+      "segundos": 3.5,
+      "influencia": 0.4,
+      "familia": "bed",
+      "max_agudos": 0.5
+    },
+    "riser": {
+      "prompt": "Fast tense rising whoosh swell building up energy, cinematic riser with airy shimmer, ending abruptly at its peak, clean, no rumble",
+      "segundos": 1.5,
+      "influencia": 0.5,
+      "familia": "swell",
+      "max_activa": 1.7
+    },
+    "golpe": {
+      "prompt": "Punchy deep cinematic impact thump with a short tight tail, modern motion graphics hit, warm low body, not distorted, one-shot",
+      "segundos": 1.0,
+      "influencia": 0.5,
+      "familia": "hit",
+      "max_graves": 0.6
+    },
+    "porcelana": {
+      "prompt": "A small solid ceramic marble dropped onto a glazed porcelain tabletop, single crisp bright clack, close, dry, no reverb, one-shot",
+      "segundos": 0.5,
+      "influencia": 0.6,
+      "familia": "tick"
+    },
+    "toque": {
+      "prompt": "A small ceramic marble gently tapping a smartphone glass screen, single soft glassy tick, close, dry, no reverb, one-shot",
+      "segundos": 0.5,
+      "influencia": 0.6,
+      "familia": "tick"
+    },
+    "rodar": {
+      "prompt": "A heavy ceramic marble rolling quickly across a smooth porcelain table, continuous smooth rolling with a slight clatter, close, no reverb",
+      "segundos": 1.5,
+      "influencia": 0.5,
+      "familia": "air",
+      "max_graves": 0.5
+    },
+    "bisagra": {
+      "prompt": "A laptop lid being opened smoothly, soft hinge friction and a gentle click at the end, close, quiet room, no reverb",
+      "segundos": 1.0,
+      "influencia": 0.55,
+      "familia": "air"
+    },
+    "contador": {
+      "prompt": "Fast digital counter numbers rolling up, rapid soft clicking ticks accelerating then stopping, modern finance app, clean, no music",
+      "segundos": 1.0,
+      "influencia": 0.5,
+      "familia": "swell",
+      "max_agudos": 0.6
+    },
+    "tinta": {
+      "prompt": "Thick dark ink wave sweeping across the whole screen, deep smooth swoosh with a soft liquid swell, cinematic transition, no splash, no rumble",
+      "segundos": 1.2,
+      "influencia": 0.5,
+      "familia": "air"
+    },
+    "deslizar": {
+      "prompt": "Papers and a notebook quickly swept off a smooth table, short sliding whoosh with paper rustle, clean, no rumble",
+      "segundos": 0.8,
+      "influencia": 0.5,
+      "familia": "air"
+    },
+    "succion": {
+      "prompt": "Reverse whoosh sucking in, a quick reversed cymbal swell rising into a hit, clean, ending sharply at the peak",
+      "segundos": 0.8,
+      "influencia": 0.55,
+      "familia": "swell"
+    },
+    "boton": {
+      "prompt": "Satisfying chunky tactile button press, deep soft click with a tiny thump, modern app interface, one-shot",
+      "segundos": 0.5,
+      "influencia": 0.6,
+      "familia": "tick",
+      "max_graves": 0.4
+    },
+    "vibra": {
+      "prompt": "Short smartphone vibration buzz on a wooden table, two quick soft buzzes, close, dry, no ringtone, no music, one-shot",
+      "segundos": 0.5,
+      "influencia": 0.6,
+      "familia": "tick",
+      "max_graves": 0.5
     }
   }
 }

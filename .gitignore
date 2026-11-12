@@ -5,3 +5,4 @@ pruebas/resultados/**/*.jpg
 .cache-elevenlabs/
 node_modules/
 out/
+__pycache__/

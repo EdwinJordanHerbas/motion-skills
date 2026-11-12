@@ -1,10 +1,10 @@
 ---
 name: video-demo-saas
-description: Método para hacer vídeos demo verticales de un SaaS o servicio (1080×1920, 25-35 s) con aspecto de producto profesional, en Remotion y three.js. Dispositivos 3D modelados en código con la interfaz real y nítida, rótulos legibles sin sonido, neumorfismo, transiciones conectadas, apariciones «mágicas», un móvil que gira y suelta monedas 3D, voz opcional, y efectos y música de ElevenLabs sin silencios muertos. Incluye una plantilla completa sin voz que se rellena con un archivo de ajustes, la receta de 27 efectos de interfaz y scripts para generarlos, medir volumen y silencios, nivelar la música y cortar teclas. Úsala cuando el usuario pida un vídeo demo, un anuncio vertical, un reel o un short de su producto, una explicación animada de una app o una web, o un vídeo para captar clientes, aunque no diga «Remotion» ni «3D». También sirve para revisar uno o para hacer solo su sonido (voz, efectos o música).
+description: Método para hacer vídeos demo verticales de un SaaS o servicio (1080×1920, 25-35 s) con aspecto de producto profesional, en Remotion y three.js. Dispositivos 3D modelados en código con la interfaz real y nítida, rótulos legibles sin sonido, neumorfismo, transiciones conectadas, apariciones «mágicas», un móvil que gira y suelta monedas 3D, voz opcional, y efectos y música de ElevenLabs sin silencios muertos. Incluye una plantilla completa sin voz que se rellena con un archivo de ajustes, la receta de 41 efectos (interfaz, objetos y ambiente), un sonido inmersivo para mundos 3D y scripts para generarlos, medir volumen, picos y silencios, nivelar la música, cortar teclas y comprobar cómo pronuncia la voz una marca. Úsala cuando el usuario pida un vídeo demo, un anuncio vertical, un reel o un short de su producto, una explicación animada de una app o una web, o un vídeo para captar clientes, aunque no diga «Remotion» ni «3D». También sirve para revisar uno o para hacer solo su sonido (voz, efectos o música).
 license: Apache-2.0
 compatibility: Proyecto Remotion 4 con three.js, Node.js, uv (Python 3.10+) y ffmpeg. El sonido con ElevenLabs es opcional y necesita red y una clave propia. Solo se ha probado en Windows.
 metadata:
-  version: "0.2.0"
+  version: "0.3.0"
 ---
 
 # Vídeo demo SaaS vertical
@@ -12,6 +12,8 @@ metadata:
 Un vídeo de este tipo cuenta **un caso de uso real de principio a fin**, con la interfaz real del producto sobre dispositivos 3D. Todo va encadenado: cada elemento nace del anterior. Se entiende sin sonido, porque cada paso tiene su rótulo, y no tiene ni un segundo de aire muerto.
 
 Las cifras de las referencias (fotogramas, volúmenes y tiempos) salen del vídeo con el que nació la skill: una versión de 32,6 s con voz y otra de 32,9 s sin voz, con el móvil que gira y suelta monedas. **La versión sin voz es la plantilla de `assets/codigo/`**: `Plantilla.tsx` cuenta la misma historia con los mismos movimientos para «Tu marca», y todo lo que cambia de un vídeo a otro está en `ajustes.ts` (nombre, color, tipografía, textos, capturas de las pantallas y sonido). Para un vídeo nuevo sin voz, parte de ella.
+
+La segunda referencia es la intro 3D de NeumorStudio (33,6 s, noviembre de 2026), hecha con esta skill: un mundo 3D en un solo plano con un objeto que guía la mirada. De ella salen el sonido inmersivo (cada objeto suena a su material, el aire sigue a la cámara), la voz de marca con un tono por escena, la marca dicha en español y el recorte de un móvil delante de una pantalla.
 
 Lee la referencia de cada paso solo cuando llegues a él:
 
@@ -21,8 +23,8 @@ Lee la referencia de cada paso solo cuando llegues a él:
 | Portátil y móviles 3D, pantallas nítidas, cámara, móvil inclinado con feed, giro y dinero | `references/imagen-3d.md` |
 | **Atención y recorrido del ojo**: un foco cada vez, rótulos junto a su objeto, iconos reconocibles sin logotipos ajenos | `references/atencion-ojo.md` |
 | Rótulos de producto, magia («¡pum!»), neumorfismo, transiciones conectadas, cursor | `references/transiciones-estilo.md` |
-| Voz: modelo, elección de voz, tomas, colocación y palabras a fotogramas | `references/voz.md` |
-| Efectos, paquete de sonido, música, mezcla en Remotion y silencios | `references/sonido.md` |
+| Voz: modelo, elección de voz, tono por escena, marcas en español, tomas, colocación y palabras a fotogramas | `references/voz.md` |
+| Efectos, paquete de sonido, sonido inmersivo, música, mezcla en Remotion, picos y silencios | `references/sonido.md` |
 | Render, medidas, hojas de contacto y lista de fallos ya vistos | `references/revision.md` |
 | Cerrar con una lección y compartirla (opcional) | `references/lecciones.md` |
 
@@ -67,13 +69,18 @@ scripts/
   huecos.py           fotogramas rotos: fondo en blanco o un objeto 3D que falta un fotograma
   empalme.py          alarga un acto sin regenerar la música: repite un compás entero en el tiempo más parecido
   claridad.py         casting de voz: qué toma se entiende mejor bajo la música del vídeo y cuál tiene las eses afiladas
-assets/sonidos/       receta.json: los 27 efectos de interfaz por generar (volúmenes en references/sonido.md)
+  picos.py            pico real por fotograma: en qué fotogramas se apila el sonido; --bloques compara pistas
+  desfases.py         el pico de cada efecto en fotogramas, que es su desfase
+  vocal_e.py          ¿dice «Estudio» o «Studio»? mide la «e» antes de la /s/ (Whisper no la distingue)
+assets/sonidos/       receta.json: los 41 efectos por generar, 27 de interfaz y 14 de objetos y ambiente (volúmenes en references/sonido.md)
 assets/codigo/        la plantilla y sus piezas (ver LEEME.md)
   Plantilla.tsx       la composición completa sin voz: chat, marca, portátil, móviles, feed, giro con monedas, revisión, informe y formulario
   ajustes.ts          lo único que hay que rellenar: marca, color, tipografía, textos, capturas y sonido
   kit-plantilla.tsx   colores, tipografías, curvas y p()/mix()
   mundo3d.ts          portátil, móviles y monedas en three.js, con lienzos con margen
   timeline.json       duración y tramos de música de la plantilla; plan-musica.json, el plan para ElevenLabs
+  sonido-inmersivo.tsx  extracto de la intro 3D: voz que aparta la música desde su primer sonido, efectos con desfase medido, aire que sigue a la cámara, ambiente cortado por el golpe y mezcla
+  recorte-movil.tsx   RecorteMovil: recorta a una pantalla DOM la silueta del móvil 3D que pasa por delante
 assets/leccion.md     plantilla de lección (la misma que lecciones/PLANTILLA.md del repositorio)
 ```
 

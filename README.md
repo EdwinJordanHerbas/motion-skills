@@ -80,7 +80,7 @@ En macOS y Linux debería funcionar igual, pero está sin probar.
 ## Qué hay aquí
 
 ```
-skills/<skill>/        cada skill: SKILL.md, README.md, references/, scripts/ y assets/
+skills/<skill>/        cada skill: SKILL.md, README.md, CHANGELOG.md, references/, scripts/ y assets/
 .claude-plugin/        el marketplace de Claude Code: un plugin por skill
 lecciones/<skill>/     lecciones aportadas por quienes usan cada skill; la plantilla, en lecciones/PLANTILLA.md
 pruebas/<skill>/       encargos fijos para comparar versiones de cada skill

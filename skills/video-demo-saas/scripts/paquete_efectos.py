@@ -10,11 +10,14 @@ Por cada efecto pide 3 tomas (con la influencia de la receta, 0,15 menos y 0,15 
 según su familia y las criba por medida: duración activa, energía bajo 150 Hz (retumba) y sobre
 6 kHz (chirría). Entre las que pasan, en los clics y los golpes gana el ataque más rápido y corto.
 La elegida se recorta, lleva fundidos y se normaliza a 0,89 de pico. El tecleo se corta en teclas
-sueltas (tecla0.wav…) con cortar_teclas.py. Al final deja informe.json con las medidas de cada toma.
+sueltas (tecla0.wav…) con cortar_teclas.py. Los fondos continuos (familia `bed`, como `aire`) se
+piden en bucle (`"bucle": true`) y, con `"alargar_s"`, se repiten con un fundido cruzado de 0,25 s
+hasta cubrir esos segundos: un solo archivo para todo el vídeo. Al final deja informe.json con las
+medidas de cada toma.
 
-Cada petición se guarda en la caché, así que repetir no vuelve a cobrar. Las 3 tomas de los 20
-efectos suman unos 60 s de audio generado: antes, mira tus créditos con `elevenlabs.py plan`.
-Usa ffmpeg para leer y filtrar.
+Cada petición se guarda en la caché, así que repetir no vuelve a cobrar. Las 3 tomas de los 34
+efectos de la receta suman unos 120 s de audio generado: antes, mira tus créditos con
+`elevenlabs.py plan`, y si solo quieres una tanda, pásale `--solo`. Usa ffmpeg para leer y filtrar.
 """
 from __future__ import annotations
 
@@ -38,6 +41,8 @@ REGLAS = {
     'hit': {'max_activa': 0.9, 'max_graves': 0.40, 'max_agudos': 0.50, 'seco': True},
     'air': {'max_activa': 1.8, 'max_graves': 0.35, 'max_agudos': 0.50, 'seco': False},
     'swell': {'max_activa': 1.3, 'max_graves': 0.30, 'max_agudos': 0.50, 'seco': False},
+    # fondo continuo (aire, ambiente): sin límite de duración, más cuerpo abajo y menos siseo arriba
+    'bed': {'max_activa': 999.0, 'max_graves': 0.60, 'max_agudos': 0.40, 'seco': False},
 }
 # Los móviles no dan nada por debajo de 150-200 Hz, y el aire por encima de 11 kHz en un barrido solo suma siseo.
 FILTROS = {
@@ -45,6 +50,7 @@ FILTROS = {
     'hit': 'highpass=f=120,lowpass=f=14000,highshelf=f=9000:g=-3',
     'air': 'highpass=f=170,lowpass=f=11000',
     'swell': 'highpass=f=200,lowpass=f=12000',
+    'bed': 'highpass=f=90,lowpass=f=9000',
 }
 
 
@@ -92,8 +98,13 @@ def veredicto(md: dict, ef: dict) -> tuple[list[str], float]:
         por_que.append(f"retumba ({md['graves'] * 100:.0f} % bajo 150 Hz)")
     if md['agudos'] > r['max_agudos']:
         por_que.append(f"chirría ({md['agudos'] * 100:.0f} % sobre 6 kHz)")
-    # Clics y golpes: ataque rápido y corto. Barridos: una subida de unos 250 ms y pocos graves.
-    coste = md['subida_ms'] / 10 + md['activa_s'] if r['seco'] else abs(md['subida_ms'] - 250) / 150 + md['graves'] * 2
+    # Clics y golpes: ataque rápido y corto. Barridos: una subida de unos 250 ms y pocos graves. Fondos: sin retumbar ni sisear.
+    if ef['familia'] == 'bed':
+        coste = md['graves'] * 2 + md['agudos']
+    elif r['seco']:
+        coste = md['subida_ms'] / 10 + md['activa_s']
+    else:
+        coste = abs(md['subida_ms'] - 250) / 150 + md['graves'] * 2
     return por_que, coste
 
 
@@ -108,8 +119,20 @@ def fundidos(x: np.ndarray, entrada_ms: float, salida_ms: float) -> np.ndarray:
     return y
 
 
+def alargar(x: np.ndarray, segundos: float, cruce_s: float = 0.25) -> np.ndarray:
+    """Repite un bucle con fundido cruzado hasta cubrir `segundos`."""
+    n, c = int(segundos * SR), int(cruce_s * SR)
+    w = np.linspace(0, 1, c)[:, None]
+    y = x.copy()
+    while len(y) < n:
+        y = np.concatenate([y[:-c], y[-c:] * (1 - w) + x[:c] * w, x[c:]])
+    return y[:n]
+
+
 def toma(ef: dict, influencia: float, k: int, cache: Path, modelo: str) -> Path:
     cuerpo = {'text': ef['prompt'], 'duration_seconds': round(max(0.5, min(ef['segundos'], 30)), 2), 'prompt_influence': influencia, 'model_id': modelo}
+    if ef.get('bucle'):
+        cuerpo['loop'] = True
     f = el.cache(cache, 'efecto', {**cuerpo, 'toma': k}, 'mp3')  # la misma caché que `elevenlabs.py efecto`
     if not f.exists():
         f.write_bytes(el.pedir('POST', '/v1/sound-generation', cuerpo, {'output_format': 'mp3_44100_128'}))
@@ -146,6 +169,8 @@ def main():
         seco = REGLAS[ef['familia']]['seco']
         if seco:
             y = y[max(0, mejor['medidas']['ataque'] - int(0.004 * SR)):]
+        if ef.get('alargar_s'):
+            y = alargar(y, ef['alargar_s'])
         y = fundidos(y, 2 if seco else 15, 40)
         y *= 0.89 / (np.abs(y).max() + 1e-9)
         if ef.get('cortar'):

@@ -29,10 +29,13 @@ Plantilla de frases, con su pausa previa (`gap`, en fotogramas) y su intención.
   - las eses: la energía entre 4,5 y 8 kHz. Por encima del 3 % suena afilada y cansa (también la da `claridad.py`);
   - en una voz femenina clara, un tono medio de 200-230 Hz. Por debajo de 190 Hz suena más pesada.
 - **Una puntuación automática no basta para elegir voz.** Si sus componentes son percentiles dentro del lote, premian quedar en el medio, no ser mejor. Decide de oído entre las dos o tres primeras.
+- **Para que el usuario elija de oído**, graba en cada voz las mismas frases del vídeo, nivélalas igual y mándale un MP4 por voz con una tarjeta de título con su nombre, más uno con todas seguidas. Los WAV sueltos no le sirvieron: pidió «ponme con mp4 para descargar».
+- **Voz de marca.** Si la marca tiene su propia voz (clonada en su cuenta, por ejemplo), úsala en los vídeos de esa marca y anota su `voice_id` en su proyecto. Una voz clonada puede responder menos a las etiquetas que una de la biblioteca: escucha que el tono cambie de verdad entre escenas antes de dar el reparto por bueno.
 - **Comprueba que la voz se puede usar comercialmente** con el plan que tengas. Las voces de la biblioteca tienen condiciones propias.
 - **Modelo `eleven_v4`** con `language_code: es`. Es el más expresivo, pero no controla la velocidad. La alternativa estable es `eleven_multilingual_v2`.
 - **Estabilidad 0,55**, con tomas a 0,45, 0,5, 0,55 y 0,6. Pide 4 tomas por frase y elige la que suene más natural y quepa en su hueco.
 - **Etiquetas** como `[warmly]`, una como mucho: a veces las lee en voz alta.
+- **Un tono por escena**, no la misma etiqueta para todas las frases. En la intro 3D de NeumorStudio: `[confident]` para la marca, el dinero y el cierre; `[cheerfully]` para la web que reserva sola; `[warmly]` para el panel, la invitación y la llamada a la acción; `[calm]` para lo automático; `[proudly]` para el cliente real. Tres tomas por frase, a estabilidad 0,5, 0,4 y 0,55. La etiqueta va delante del texto: `"[warmly] Cuéntanos tu caso."`.
 - **Comprueba que la pregunta sube.** Mide el tono en la última vocal con voz de la pregunta, no en el final de la palabra: una palabra que acaba en -s sorda no tiene tono. En el vídeo de referencia, la toma con mejores puntos no subía (−0,8 semitonos) y otra subía +7,6. Las etiquetas como `[confident]` aplanan las preguntas.
 - **Números y siglas:** escríbelos como se dicen si los lee la voz. En pantalla pueden ir en cifra («48 h»).
 
@@ -41,10 +44,21 @@ Plantilla de frases, con su pausa previa (`gap`, en fotogramas) y su intención.
 Con `scripts/elevenlabs.py`:
 
 ```
-uv run scripts/elevenlabs.py voz <voice_id> "Texto de la frase, tal como se dice." voz/explica.wav --estabilidad 0.55 --toma 0
+uv run scripts/elevenlabs.py voz <voice_id> "Texto de la frase, tal como se dice." voz/explica.wav --estabilidad 0.55 --toma 0 \
+  --anterior "Texto de la frase de antes." --siguiente "Texto de la frase de después."
 ```
 
 Junto al wav deja `explica.json` con cada palabra y su inicio y fin en segundos (de la alineación de ElevenLabs). Cuesta unos créditos por carácter: antes de un lote grande, mira los créditos libres (`elevenlabs.py plan`).
+
+**Rehaz solo las frases que cambian.** `--anterior` y `--siguiente` hacen que la entonación enlace con las vecinas, y forman parte de la petición. Si cambias el texto de una frase y regeneras todas, cambian también las peticiones de sus vecinas: se pagan otra vez y salen tomas distintas de las que el usuario ya aprobó.
+
+## Marcas que se dicen en español
+
+En la intro 3D, el usuario pidió que la voz dijera «Neumor Estudio» y no «Neumor Studio». En pantalla la marca se sigue escribiendo NeumorStudio, pero en el texto de la voz va la palabra española: `"text": "Neumor Estudio."`.
+
+- **Whisper no sirve para comprobarlo.** Con marcas que conoce, normaliza lo que oye y escribe «Neumor Studio» aunque la voz diga «Estudio».
+- **Mídelo con los formantes:** `uv run scripts/vocal_e.py voz/marca.wav voz/cierre.wav`. El script busca la /s/ y mide cuánto dura justo antes un tramo sonoro con el segundo formante por encima de 1.800 Hz, que es la «e». Las tomas que dicen «Estudio» dan 95-135 ms, y las que decían «Studio», 25-55 ms. Ante un «dudoso», escucha.
+- Vale para cualquier palabra española que empiece por «es» y que la voz pueda leer en inglés.
 
 ## Colocar la voz en la línea de tiempo
 
@@ -63,6 +77,9 @@ Como la imagen lee esos fotogramas, cambiar una frase mueve la animación sola. 
 La imagen de la plantilla no depende de ninguna voz. Si se la añades, no encadenes las frases: pon en cada una `at`, el fotograma de su evento (una constante de `Plantilla.tsx`, como `MARCA_AT` o `REV`), y coloca ahí su primer sonido sin mover la imagen. Cada frase dice su rótulo. Si dos frases quedan pegadas (menos de unos 10 fotogramas entre ellas), quita una y deja ese rótulo para leerlo en silencio.
 
 **Mezcla:** la música baja unos 8 dB bajo cada frase (0,4 de volumen, con rampas de 6 y 10 fotogramas) y los efectos un 30 %. Con la voz a −14 LUFS queda unos 9 dB por encima de la música. Si quieres avisar en pantalla de que la voz es generada, `Lockup` acepta una `nota` («Voz generada con IA»).
+
+- **Aparta la música desde el primer sonido de la frase** (`from`), no desde su primera palabra alineada: la alineación puede llegar tarde. En la intro 3D, una palabra sonaba en f728 y su alineación decía f735; la música aún no se había apartado y el pico subió a +0,1 dBTP. Si la frase final cae sobre la cola del golpe de la música, apártala a medias (0,5) y baja esa frase 1,4 dB: apartarla entera dejó un silencio y no apartarla pasaba de −1 dBTP. El código está en `assets/codigo/sonido-inmersivo.tsx` (`TRAMOS` y `enVoz`).
+- **Con voz, la voz manda en los tiempos.** Al meter la voz en un vídeo montado sin ella, un acto puede quedarse corto para su frase (en la intro 3D, el de los tres giros del móvil). Ajusta ese acto y apunta en el README los dos juegos de tiempos (con voz y sin voz), con un interruptor (`CON_VOZ`), porque el usuario puede pedir volver atrás.
 
 ## Palabras del guion → fotogramas
 
@@ -83,5 +100,6 @@ Indexa por posición en el guion (`palabras('explica')[10]` es la undécima pala
 ## Antes de dar la voz por buena
 
 - Escucha las preguntas: la entonación tiene que subir. Si no sube en ninguna toma, avisa al usuario en lugar de esconderlo.
-- Comprueba que el nombre de marca se entiende.
+- Comprueba que el nombre de marca se entiende y que se dice como pide el usuario (`scripts/vocal_e.py` si lleva una «e» española).
+- Saca el pico por fotograma con `scripts/picos.py`: si un pico cae al principio de una frase, la música no se apartó a tiempo.
 - Al publicar, el vídeo se marca como hecho con IA en la plataforma. No hace falta rotularlo en pantalla si el usuario no lo pide.

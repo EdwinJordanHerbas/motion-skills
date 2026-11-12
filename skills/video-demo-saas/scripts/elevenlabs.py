@@ -5,6 +5,7 @@
 """Cliente mínimo de ElevenLabs para cualquier proyecto: voz con tiempos por palabra, efectos y música.
 
   uv run elevenlabs.py voz <voice_id> "<texto>" <salida.wav> [--estabilidad 0.55] [--modelo eleven_v4]
+                           [--anterior "<frase de antes>"] [--siguiente "<frase de después>"]
   uv run elevenlabs.py efecto "<prompt en inglés>" <segundos> <salida.mp3> [--influencia 0.6] [--toma 0]
   uv run elevenlabs.py musica <plan.json> <salida.mp3> [--toma 0]
   uv run elevenlabs.py plan                                     plan y créditos libres
@@ -96,6 +97,12 @@ def voz(a, cdir: Path):
     cuerpo = {'text': a.texto, 'model_id': a.modelo, 'voice_settings': {'stability': a.estabilidad}}
     if a.modelo != 'eleven_multilingual_v2':
         cuerpo['language_code'] = 'es'
+    # La frase de antes y la de después: la entonación enlaza con sus vecinas. Entran en la caché, así que si cambias
+    # el texto de una frase, rehaz solo esa: si regeneras sus vecinas, cambian también sus tomas.
+    if a.anterior:
+        cuerpo['previous_text'] = a.anterior
+    if a.siguiente:
+        cuerpo['next_text'] = a.siguiente
     fmt = 'pcm_24000'
     wav = cache(cdir, 'voz', {'voice': a.voice_id, 'fmt': fmt, 'toma': a.toma, **cuerpo}, 'wav')
     meta = wav.with_suffix('.json')
@@ -142,6 +149,8 @@ def main():
     v.add_argument('--estabilidad', type=float, default=0.55)
     v.add_argument('--modelo', default='eleven_v4')
     v.add_argument('--toma', type=int, default=0)
+    v.add_argument('--anterior', default='', help='texto de la frase anterior (previous_text)')
+    v.add_argument('--siguiente', default='', help='texto de la frase siguiente (next_text)')
     e = sub.add_parser('efecto')
     e.add_argument('prompt')
     e.add_argument('segundos', type=float)

@@ -49,7 +49,7 @@ const camara = (margen = false) => {
   return c;
 };
 const PROYECTOR = camara();
-const aPantalla = (v: THREE.Vector3): [number, number] => {
+export const aPantalla = (v: THREE.Vector3): [number, number] => {
   const n = v.clone().project(PROYECTOR);
   return [((n.x + 1) / 2) * W, ((1 - n.y) / 2) * H];
 };

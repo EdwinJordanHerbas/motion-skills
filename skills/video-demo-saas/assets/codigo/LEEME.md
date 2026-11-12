@@ -63,6 +63,8 @@ La plantilla no tiene voz. La música y los efectos se activan en `ajustes.sonid
 | `timeline.json` | Duración, tramos de música y momentos clave de la plantilla | — |
 | `plan-musica.json` | El plan por tramos para la música de ElevenLabs | — |
 | `encuadre_portatil.py` | Simula la entrada del portátil y comprueba que cabe en el encuadre | numpy (`uv run`) |
+| `recorte-movil.tsx` | `RecorteMovil`: recorta a una pantalla DOM la silueta del móvil 3D que pasa por delante. Envuelve la pantalla (`Mapped`) dentro de la misma `Camara` | `mundo3d.ts` (`aPantalla`, `matriz`, `MOVIL`), `three` |
+| `sonido-inmersivo.tsx` | Extracto de la intro 3D de NeumorStudio, para leer y adaptar (no compila suelto): voz que aparta la música desde su primer sonido, efectos con desfase medido y en capas, aire que sigue a la cámara, ambiente cortado por el golpe, mezcla y guarda del golpe final. Ver `references/sonido.md`, «Sonido inmersivo» | las constantes del guion y la cámara de tu composición |
 
 ## Si cambias la historia
 

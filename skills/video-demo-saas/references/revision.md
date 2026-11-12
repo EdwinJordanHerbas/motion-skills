@@ -13,13 +13,17 @@ npx remotion render out/<video>/bundle <Composición> final.mp4 --image-format=p
 - **Fotogramas sueltos** (`still`) para cada entrada y cada relevo: son baratos y van primero. Para una entrada, revisa del primer fotograma a +30, cada 3.
 - **Borrador** a media escala en JPEG, que tarda unos minutos, y después la hoja de contacto.
 - **Final** a escala completa y en PNG: el JPEG aplasta degradados y deja bandas. Lánzalo en segundo plano y avisa al usuario.
+- **Si solo cambia el sonido**, saca solo el audio (`--codec=wav`, unos 2 min frente a 10) y móntalo sobre el MP4 anterior con `npx remotion ffmpeg … -c:v copy` (comando en `sonido.md`). Vuelve a medir sobre el MP4.
 
 ## Medir
 
 ```
 uv run scripts/medir.py final.mp4 hoja.jpg 0,30,60,90,120,165,172,180,…   volumen, pico, duración y hoja de contacto
-uv run scripts/silencios.py final.mp4 -29                                   aire muerto (tiene que salir «ninguno»)
+uv run scripts/silencios.py final.mp4 -29                                   aire muerto (tiene que salir «ninguno»); con el MP4, no con un WAV
+uv run scripts/picos.py final.mp4                                           en qué fotogramas está el pico real (si pasa de −1 dBTP, qué se suma ahí)
 ```
+
+`huecos.py` marca como rotos los fotogramas a mitad de un giro del móvil, porque de canto ocupa pocos píxeles. Míralos antes de buscar un fallo: si es un giro, es un falso positivo.
 
 Mira la hoja de contacto de verdad, fotograma a fotograma, buscando cortes, fantasmas, solapes de rótulos, textos partidos y elementos fuera de la zona segura. Para esto último, saca una hoja aparte con `uv run scripts/zonas.py <mp4> <hoja.jpg> <fotogramas>`, que tiñe de rojo lo que tapa la interfaz. También sirve con un render de prueba a `--scale=0.3`. Cuando entregues, di qué has medido y qué no.
 
@@ -83,6 +87,13 @@ Mira la hoja de contacto de verdad, fotograma a fotograma, buscando cortes, fant
 | Fotogramas en blanco seguidos en el render completo (los cuerpos 3D desaparecen y luego el fondo), que salen bien como `still` sueltos | Una tarjeta dentro de una pantalla proyectada (`Mapped`) entraba con `filter: blur()`, y en el fotograma en que el filtro pasaba a `undefined` la GPU perdía el contexto WebGL. El lienzo perdido se pinta blanco y tapa el fondo hasta que se desmonta. Solo pasa en secuencia, por eso los sueltos salen bien | Dentro de pantallas proyectadas, entradas sin `blur` (escala y opacidad). El componente del lienzo comprueba `gl.isContextLost()` y, si se pierde, para el render con `cancelRender`. Para aislarlo, renderiza el tramo con `--concurrency=1` y quita capas DOM una a una |
 | Sello «Ejemplo» ilegible en el móvil | Era de 16 px en la barra de una pantalla inventada: con el vídeo a 380 px de ancho se quedaba en 5 px, y la pantalla salía sin marcar | Sello en tinta llena con texto claro, de 28 px como mínimo. Comprueba todo lo que se lee reduciendo el fotograma a 380 px de ancho |
 | Un fondo con degradado radial suave hace anillos al comprimir | 8 bits no bastan para un degradado de 13 niveles en 900 px, y el códec los aplana | Grano fijo muy suave (`feTurbulence` con semilla, `mix-blend-mode: overlay`, opacidad 0,5) y render con `--crf=16` |
+| La pantalla del portátil tapa el cuerpo del móvil que está delante: se ve sin marco arriba y a la izquierda (intro 3D) | La pantalla es DOM y se pinta encima del lienzo 3D | Recortar la pantalla con la silueta del móvil (`RecorteMovil`, ver `imagen-3d.md`) |
+| Sin voz, el sonido «plano», sin caña (usuario, intro 3D) | Solo efectos de interfaz, y 13 dB por debajo de la música | Sonido del material de cada objeto, aire que sigue a la cámara, ambiente cortado por el golpe y efectos 5 dB arriba (`sonido.md`, «Sonido inmersivo») |
+| Pico de +0,1 dBTP al empezar una frase (intro 3D con voz) | La música se apartaba desde la primera palabra alineada, pero la voz sonaba 7 fotogramas antes | Apartar desde el primer sonido de la frase (`from`) |
+| Pico de −0,43 dBTP en el cierre (intro 3D con voz) | El aire a la velocidad máxima de la cámara sobre un golpe de la música. Quitar efectos sueltos no lo arregló | Techo del aire de 0,2 a 0,14; buscar la capa culpable con `scripts/picos.py` |
+| La voz dice la marca en inglés y el usuario la quiere en español | El texto de la voz llevaba la marca escrita como en pantalla | Escribir la palabra española en el texto de la voz, rehacer solo esas frases y comprobar la «e» con `scripts/vocal_e.py` (Whisper no la distingue) |
+| «Quita el EJEMPLO» de una pantalla inventada (usuario, intro 3D) | Decisión del usuario para ese vídeo | Quitarlo y dejarlo escrito con fecha en el código y en el README. La regla no cambia: en el siguiente vídeo, el sello va puesto salvo que el usuario diga otra cosa |
+| Un informe JSON con rutas absolutas del ordenador iba a entrar en el commit, dentro de `public/` | El generador de efectos escribía su informe junto a los WAV | Informes fuera de `public/` y del repositorio (en `out/`, por ejemplo); en `public/` solo lo que se sirve |
 
 ## Antes de entregar
 
@@ -91,8 +102,26 @@ Mira la hoja de contacto de verdad, fotograma a fotograma, buscando cortes, fant
 - [ ] Cada relevo de rótulos sin solapes, y cada rótulo completo.
 - [ ] Hoja de contacto completa revisada.
 - [ ] Todo lo que se lee (rótulos, sellos «Ejemplo», cifras) sigue legible con el fotograma reducido a 380 px de ancho.
-- [ ] `silencios.py` → ninguno; `medir.py` → volumen y pico dentro de objetivo.
+- [ ] `silencios.py` → ninguno; `medir.py` → volumen y pico dentro de objetivo; si el pico pasa de −1 dBTP, `picos.py` dice dónde.
 - [ ] Textos contra la fuente real, sin cifras inventadas y con los datos ficticios marcados.
 - [ ] Dominio y redes solo si existen.
 - [ ] README del vídeo actualizado: qué hay, decisiones, licencias y cómo renderizar.
 - [ ] Sin commit hasta que el usuario lo pida.
+
+## Al hacer commit (cuando el usuario lo pide)
+
+- **Solo el vídeo.** Prepara su carpeta de código, sus recursos de `public/` y nada más. Si `src/Root.tsx` tiene cambios de otros vídeos, prepara solo las líneas del tuyo sin tocar la copia de trabajo:
+  ```
+  git show HEAD:src/Root.tsx > root.tsx      # añade a mano solo el import y la <Composition> del vídeo
+  git update-index --cacheinfo 100644,$(git hash-object -w --path=src/Root.tsx root.tsx),src/Root.tsx
+  ```
+- **Compila lo que va en el commit, no tu carpeta.** La copia de trabajo puede compilar gracias a archivos que no entran. Saca el índice a una carpeta temporal, enlaza `node_modules` y pasa los tipos:
+  ```
+  git checkout-index -a --prefix=<temporal>/limpio/
+  New-Item -ItemType Junction -Path <temporal>\limpio\node_modules -Target .\node_modules     (PowerShell; mklink desde bash falla)
+  npx tsc --noEmit                                                                            (dentro de limpio)
+  [System.IO.Directory]::Delete('<temporal>\limpio\node_modules', $false)                    quita el enlace, no lo que apunta
+  ```
+  Nunca borres esa carpeta con un borrado recursivo antes de quitar el enlace: se llevaría el `node_modules` del proyecto. En macOS o Linux, el enlace es `ln -s` y se quita con `rm` sin `-r`.
+- **Revisa lo preparado** (`git diff --cached --stat` y una búsqueda de rutas locales y claves) antes de confirmar.
+- **Di dónde queda.** El commit es local: explica en qué rama está y a qué repositorio remoto iría. No se sube nada (`push`) hasta que el usuario lo pida.

@@ -42,10 +42,14 @@ La plantilla no tiene voz y funciona en silencio hasta que le das música y efec
 
 - La música tiene sus propios [términos](https://elevenlabs.io/music-terms), con límites por tipo de cuenta y de uso.
 - Sin ElevenLabs, usa tus propios sonidos y una música con licencia. Las reglas de mezcla y de silencios valen igual.
-- **Los efectos no vienen como audio**, porque los términos de ElevenLabs no permiten repartir lo generado. Viene su receta (`assets/sonidos/receta.json`) y un script que genera los 27 con tu clave:
+- **Los efectos no vienen como audio**, porque los términos de ElevenLabs no permiten repartir lo generado. Viene su receta (`assets/sonidos/receta.json`) y un script que genera los 41 con tu clave: los 27 de interfaz de la plantilla y 14 de objetos y ambiente para mundos 3D.
   ```bash
   uv run scripts/paquete_efectos.py assets/sonidos/receta.json public/<proyecto>/sfx
   ```
+
+## Novedades
+
+La versión actual es la **0.3.0**. Trae lo aprendido en la intro 3D de NeumorStudio: sonido inmersivo, voz con un tono por escena, la marca dicha en español y tres scripts de medida nuevos. Todos los cambios, versión a versión, están en [CHANGELOG.md](CHANGELOG.md).
 
 ## Pruebas
 

@@ -64,6 +64,7 @@ La interfaz es HTML normal: tablas, chips, tipografías. Se pega al cuadriláter
 - `quadDe(pose, w, h, z)` proyecta un rectángulo del plano local z de un objeto (la cara del móvil), y `quadPantalla(l)` la pantalla del portátil, siguiendo el giro de la tapa.
 - La interfaz encima lleva un brillo en diagonal que depende del giro (`linear-gradient(115 + ry·2 deg, …)`), para que parezca cristal.
 - **Orden de capas:** el DOM va por encima del lienzo. Si un objeto 3D tiene que pasar por delante de una tarjeta DOM (los móviles posándose en la revisión), esa tarjeta se pone **antes** del lienzo en el árbol. Si una pantalla DOM no debe tapar a un objeto 3D que pasa delante, se apaga antes de que se crucen.
+- **Si tienen que verse los dos a la vez** (un móvil delante de la pantalla encendida del portátil), recorta la pantalla DOM con la silueta del objeto. En la intro 3D de NeumorStudio, la pantalla del portátil tapaba el cuerpo del móvil que tenía delante: el móvil se veía sin marco arriba y a la izquierda. `RecorteMovil` (`assets/codigo/recorte-movil.tsx`) proyecta las esquinas redondeadas de la cara y de la trasera del móvil, saca su envolvente convexa y se la resta a la pantalla con `clip-path: path(evenodd, …)`. Con la cara sola no basta, porque al girar asoma el canto. Compruébalo en los fotogramas en que se cruzan.
 
 ## Entrada del portátil (la que no se ve cortada)
 
