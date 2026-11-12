@@ -18,7 +18,7 @@ La clave se lee solo de `ELEVENLABS_API_KEY`. **Licencias:**
 - Si cambia el plan o la cuenta, vuelve a revisar los términos antes de publicar.
 - Lo que generes es tuyo para usarlo en tus vídeos, pero no lo publiques suelto como paquete o biblioteca: la [política de uso](https://elevenlabs.io/use-policy) prohíbe poner los resultados a disposición de terceros.
 
-## El paquete de efectos (27 sonidos, por receta)
+## El paquete de efectos (40 sonidos, por receta)
 
 El audio no se reparte, porque los términos de ElevenLabs no permiten distribuir lo generado. Lo que viene es la receta, `assets/sonidos/receta.json`, con el prompt, la duración, la influencia y la familia de cada efecto, y `scripts/paquete_efectos.py`, que lo genera con tu clave, lo criba con las reglas de abajo y lo deja listo en la carpeta que le digas:
 
@@ -26,9 +26,9 @@ El audio no se reparte, porque los términos de ElevenLabs no permiten distribui
 uv run scripts/paquete_efectos.py assets/sonidos/receta.json public/<proyecto>/sfx
 ```
 
-Pide 3 tomas por efecto: las 3 tomas de los 20 prompts suman unos 60 s de audio generado. Mira antes tus créditos con `elevenlabs.py plan`. Cada cuenta obtiene tomas distintas, así que escucha el resultado. Si un efecto no convence, pide otra toma con `elevenlabs.py efecto` (otra `--toma`) y vuelve a generar solo ese con `--solo`. Sin ElevenLabs, usa tus propios sonidos con los mismos nombres.
+Pide 3 tomas por efecto: las 3 tomas de los 20 prompts de interfaz suman unos 60 s de audio generado, y las de los 13 de objetos y ambiente, unos 55 s. Si solo vas a usar algunos, genera esos con `--solo`. Mira antes tus créditos con `elevenlabs.py plan`. Cada cuenta obtiene tomas distintas, así que escucha el resultado. Si un efecto no convence, pide otra toma con `elevenlabs.py efecto` (otra `--toma`) y vuelve a generar solo ese con `--solo`. Sin ElevenLabs, usa tus propios sonidos con los mismos nombres.
 
-Los prompts están en inglés porque así responde mejor el modelo. Volumen y desfase son los del vídeo de referencia: el desfase, en fotogramas, adelanta el sonido para que su pico caiga en la acción.
+Los prompts están en inglés porque así responde mejor el modelo. Hay dos tandas: 27 de interfaz (esta tabla) y 13 de objetos y ambiente (la siguiente). Volumen y desfase son los de los vídeos de referencia: el desfase, en fotogramas, adelanta el sonido para que su pico caiga en la acción.
 
 | Archivo | Prompt (resumen) | s | Influencia | Familia | Vol. | Desfase | Cuándo |
 |---|---|---|---|---|---|---|---|
@@ -53,7 +53,27 @@ Los prompts están en inglés porque así responde mejor el modelo. Volumen y de
 | `asombro` | Bright cinematic impact with a shimmering sparkle tail, a wow reveal moment in a product video, clean, not boomy | 1,3 | 0,5 | hit | 0,50 | 0 | Momento de asombro |
 | `tecla0`-`tecla7` | Cortadas de «Fast natural typing on a quiet modern laptop keyboard, about fourteen crisp separate key presses with tiny pauses, close and dry, no music, no voice» (3 s, 0,6) | 0,1 | — | — | 0,22-0,32 | 0 | Cada letra tecleada |
 
-`magia` y `monedas` no pasan la criba de agudos (88 % sobre 6 kHz): un centelleo y unas monedas son agudos por naturaleza. Se aceptan bajos de volumen, con `max_high` subido en su ficha.
+`magia` y `monedas` no pasan la criba de agudos (88 % sobre 6 kHz): un centelleo y unas monedas son agudos por naturaleza. Se aceptan bajos de volumen, con `max_agudos` subido en la receta.
+
+**Objetos y ambiente.** Nacieron en una intro de marca en 3D: un plano continuo sobre una mesa, con una bola de porcelana que conduce la historia de un objeto a otro. El volumen es el de su tabla `SFX`, que luego se multiplica por unos 2,3 en total: la ganancia común de efectos (1,8) por la de toda la mezcla (ver «Sonido inmersivo»). El desfase es el pico medido con `scripts/desfases.py`.
+
+| Archivo | Prompt (resumen) | s | Influencia | Familia | Vol. | Desfase | Cuándo |
+|---|---|---|---|---|---|---|---|
+| `aire` | Continuous soft airy wind movement, like a smooth camera gliding through open space, gentle steady whoosh texture, no tones, no rumble, seamless loop | 5 (bucle) | 0,45 | bed | 0,02 + 0,14 × velocidad | — | Todo el vídeo, siguiendo a la cámara. Se pide como bucle y `paquete_efectos.py` lo alarga a `--largo` segundos |
+| `ambiente` | Busy small restaurant dining room ambience, distant indistinct chatter, cutlery and plates clinking, slightly muffled, no music, no clear words | 3,5 | 0,4 | bed | 0,16 | — | El «antes» (todo a mano), cortado en seco por el golpe. Cambia el lugar por el del negocio |
+| `riser` | Fast tense rising whoosh swell building up energy, cinematic riser with airy shimmer, ending abruptly at its peak, clean, no rumble | 1,5 | 0,5 | swell | 0,20 | −43 | Lo que cae o se acerca hasta un golpe |
+| `golpe` | Punchy deep cinematic impact thump with a short tight tail, modern motion graphics hit, warm low body, not distorted, one-shot | 1,0 | 0,5 | hit | 0,10-0,40 | 0 | El impacto que cambia la escena; con `logo-hit` en la marca |
+| `porcelana` | A small solid ceramic marble dropped onto a glazed porcelain tabletop, single crisp bright clack, close, dry, no reverb, one-shot | 0,5 | 0,6 | tick | 0,06 + 0,24 × aplastamiento | 0 | Cada vez que el objeto conductor aterriza |
+| `toque` | A small ceramic marble gently tapping a smartphone glass screen, single soft glassy tick, close, dry, no reverb, one-shot | 0,5 | 0,6 | tick | 0,16 | 0 | Cada toque en una pantalla, debajo del clic |
+| `rodar` | A heavy ceramic marble rolling quickly across a smooth porcelain table, continuous smooth rolling with a slight clatter, close, no reverb | 1,5 | 0,5 | air | 0,22 | −2 | El objeto rueda hasta el siguiente |
+| `bisagra` | A laptop lid being opened smoothly, soft hinge friction and a gentle click at the end, close, quiet room, no reverb | 1,0 | 0,55 | air | 0,26 | −4 | El portátil se abre (su clic final, en la tapa abierta) |
+| `contador` | Fast digital counter numbers rolling up, rapid soft clicking ticks accelerating then stopping, modern finance app, clean, no music | 1,0 | 0,5 | swell | 0,13-0,15 | 0 | Un contador o una cifra que corre |
+| `tinta` | Thick dark ink wave sweeping across the whole screen, deep smooth swoosh with a soft liquid swell, cinematic transition, no splash, no rumble | 1,2 | 0,5 | air | 0,24 | −8 | Un barrido de color que cubre la pantalla |
+| `deslizar` | Papers and a notebook quickly swept off a smooth table, short sliding whoosh with paper rustle, clean, no rumble | 0,8 | 0,5 | air | 0,08-0,10 | −6 | Algo barrido de la mesa; sale brillante, va bajo |
+| `succion` | Reverse whoosh sucking in, a quick reversed cymbal swell rising into a hit, clean, ending sharply at the peak | 0,8 | 0,55 | swell | 0,22 | −23 | Todo se recoge en la marca, justo antes de su golpe |
+| `boton` | Satisfying chunky tactile button press, deep soft click with a tiny thump, modern app interface, one-shot | 0,5 | 0,6 | tick | 0,30 | 0 | El botón de la llamada a la acción |
+
+Excepciones a la criba que hicieron falta (en la receta, `max_*`): `golpe` con graves hasta el 60 %, `rodar` hasta el 50 %, `boton` hasta el 40 %, `ambiente` con agudos hasta el 50 %, `contador` hasta el 60 % y `riser` con 1,7 s de duración activa.
 
 Para generar uno nuevo, sigue el mismo estilo de prompt: qué es, dos o tres adjetivos («soft, short, clean»), lo que no quieres («no reverb», «no low rumble», «not boomy») y «one-shot». Fija la duración y genera de 3 a 4 tomas:
 
@@ -69,6 +89,7 @@ uv run scripts/elevenlabs.py efecto "Soft short interface toggle switch click, c
 | hit (golpe) | 0,9 s | ≤ 40 % | ≤ 50 % | paso alto 120 Hz, paso bajo 14 kHz, −3 dB sobre 9 kHz |
 | air (barrido) | 1,8 s | ≤ 35 % | ≤ 50 % | paso alto 170 Hz, paso bajo 11 kHz |
 | swell (subida) | 1,3 s | ≤ 30 % | ≤ 50 % | paso alto 200 Hz, paso bajo 12 kHz |
+| bed (fondo continuo) | sin límite | ≤ 60 % | ≤ 40 % | paso alto 90 Hz, paso bajo 9 kHz; con `"bucle": true` se pide como bucle |
 
 Nada retumbante, nada chirriante, subidas cortas. Entre los que pasan, en los tick y los hit gana el ataque más rápido y corto. Recorta a 4 ms antes del ataque, con fundidos de 2 ms de entrada y 40 ms de salida.
 
@@ -98,8 +119,44 @@ const Efectos = () => <>{CUES.map((c, i) => {
 
 - **Teclas:** una por letra, alternando las 8 muestras con una semilla distinta en cada tecleo y un volumen que oscila ±0,06, para que no suene a la misma tecla repetida. El Intro o el botón de enviar llevan una tecla más fuerte.
 - **Pops:** en cada elemento que aparece, entre 0,14 y 0,26. El usuario los pidió expresamente («cuando aparece, ¡plup!, un pop»): sin ellos, el vídeo se siente vacío.
-- **Barridos** (`card-in`, `zoom`, `transicion`, `paper-plane`): con desfase negativo, porque su pico llega tarde.
+- **Barridos** (`card-in`, `zoom`, `transicion`, `paper-plane`, `tinta`, `riser`, `succion`): con desfase negativo, porque su pico llega tarde. **El desfase es el pico medido**, no uno a ojo: `uv run scripts/desfases.py public/<proyecto>/sfx` da el fotograma del pico de cada archivo (en el paquete de referencia: card-in 8,5, zoom 11,5, transicion 8,7, paper-plane 13,3, slice 4,4, ui-click 3,7, riser 42,8, succion 22,6). Cada cuenta genera tomas distintas, así que mide las tuyas. Con desfases a ojo, los barridos caían de 4 a 13 fotogramas tarde.
+- **Giro:** su pico va en la mitad del giro, cuando el móvil va más rápido, no en su inicio. `magia`, `monedas` y `scroll` llevan menos desfase que su pico: su ataque ya marca la acción y lo que se oye después es la cola.
+- **Tono:** `<Html5Audio toneFrequency={…}>` cambia la altura sin otro archivo. Los pops de una serie suben por una escala (`[1, 1.122, 1.26, 1.498]`, do-re-mi-sol) y un choque suena más grave (0,85).
 - **Bajo la voz**, los efectos suaves y fuera de las sílabas acentuadas.
+
+## Sonido inmersivo (sin voz)
+
+Con solo pops y clics de interfaz, un mundo 3D suena a presentación. Un usuario pidió una intro de marca en 3D «sin voz, con elementos de sonido más inmersivos… dale más caña». Lo que funcionó:
+
+1. **Cada objeto suena a su material.** El objeto conductor (una bola de porcelana) suena a porcelana al aterrizar, más fuerte cuanto más se aplasta (`v: 0.06 + 0.24 * aplastamiento`), y a cristal cuando toca una pantalla. El portátil suena a bisagra, el contador a contador y la tinta a tinta. El prompt dice el material, la acción y «close, dry, no reverb, one-shot».
+2. **Aire que sigue a la cámara.** En un plano continuo, un barrido por cada movimiento suena a cortes. Mejor un `aire` en bucle durante todo el vídeo, con el volumen atado a la velocidad de la cámara en cada fotograma:
+   ```tsx
+   const VEL_CAM = (() => {
+     const raw = Array.from({length: FRAMES + 1}, (_, f) => {
+       const a = camara(Math.max(0, f - 1)), b = camara(f + 1);
+       return Math.hypot((b.tx - a.tx) / 40, (b.ty - a.ty) / 40, (b.tz - a.tz) / 40, (b.d - a.d) / 60, (b.el - a.el) / 1.2, (b.az - a.az) / 1.2);
+     });
+     const ref = [...raw].sort((x, y) => x - y)[Math.floor(raw.length * 0.95)] || 1;  // percentil 95 = 1
+     return raw.map((v) => Math.min(1, v / ref));
+   })();
+   <Html5Audio src={staticFile('proyecto/sfx/aire.wav')} volume={(fr) => G * (0.02 + 0.14 * VEL_CAM[fr] ** 0.8)} />
+   ```
+   `camara(f)` es la función pura que ya mueve la cámara (objetivo `tx`, `ty`, `tz`, distancia `d`, elevación `el` y acimut `az`); los divisores ponen cada eje en una escala parecida, y `G` es la ganancia común de efectos. El techo es 0,14: con 0,2, el tramo más rápido de la cámara se sumó a un golpe de la música y pasó de −1 dBTP.
+3. **El «antes» tiene ambiente y el impacto lo corta en seco.** El local lleno mientras todo va a mano (`ambiente`, 0,16) se apaga en 2 fotogramas lineales en el golpe que trae la marca. El silencio repentino es parte del golpe.
+4. **Los momentos grandes van en capas.** El golpe que cambia la escena es `riser` (desfase −43: sube durante la caída) + `golpe` + `slice`. La marca final es `succion` (−23) + `logo-hit` + `golpe`. Aligera cada capa por separado si el conjunto pasa de −1 dBTP.
+5. **Compara los efectos contra la música con una pista de solo efectos.** Pon la música a `null`, saca solo el audio y mídelo. En la intro de referencia, los efectos daban −27 LUFS frente a −14 de la música: estaban 13 dB por debajo y no se oían. Se arregló con una ganancia común de efectos de 1,8 (unos 5 dB), la música 1,6 dB más baja (0,75 → 0,62) y todo 0,8 dB más (×1,1). Quedó en −15 LUFS y −1,2 dBTP.
+6. **Bajo la voz**, si los efectos se subieron así, bajan un 45 % (no un 30 %): `(1 - 0.45 * enVoz(c.f))`. Con voz, quita el centelleo (`magia`) que caiga sobre una palabra.
+
+**Picos apilados.** El pico del vídeo entero no dice qué lo causa. `uv run scripts/picos.py final.mp4` da los fotogramas con más pico real. Mira qué suena en ellos: en la intro de referencia fueron el golpe de la bola con su subida y su barrido, el aire a toda velocidad encima de un golpe de la música y la música sin apartarse antes de una palabra (ver `voz.md`). Quitar efectos sueltos no lo arregló; bajar la capa culpable, sí. `--bloques` da el volumen momentáneo cada 2 s, para comparar pistas.
+
+**Si solo cambian volúmenes**, no vuelvas a renderizar la imagen (en la intro de referencia, 10 min). Saca solo el audio (2 min) y móntalo sobre el MP4 que ya tienes:
+
+```
+npx remotion render <Composición> mezcla.wav --codec=wav --concurrency=4
+npx remotion ffmpeg -y -v error -i video.mp4 -i mezcla.wav -map 0:v -map 1:a -c:v copy -c:a aac -b:a 320k -ar 48000 -shortest final.mp4
+```
+
+Mide el resultado sobre el MP4 (el AAC mueve el pico unas décimas), no sobre el WAV. `silencios.py` lee mal un WAV suelto: pásale el MP4.
 
 ## Música
 
@@ -120,6 +177,8 @@ const Efectos = () => <>{CUES.map((c, i) => {
    - **La API rechaza tramos de menos de 3 s** (error 422, `duration_ms ≥ 3000`). Si un momento dura menos, júntalo con el tramo vecino y pon su golpe en las etiquetas («soft impact on the first downbeat»). El tramo final también debe durar 3 s: alárgalo más allá del final del vídeo y corta la toma.
    - **Sin voz**, la música es la cama: `intro 0-131` (plucked synth arpeggio, light shaker, no kick drum), `groove 131-419`, `build 419-509` (building intensity, snare build), `wow 509-613` (full energy on the first downbeat, euphoric), `steady 613-777`, `lift 777-940` y `outro 940-1030`. Estilos: `modern electronic, clean product demo music, warm synths, tight light drums, instrumental, 120 BPM`.
 2. **Tres tomas.** En cada una se busca el golpe final y se desplaza para que caiga en `music.end` (hasta 300-400 ms; si el desfase es mayor, se regenera). Elige de oído: en el vídeo de referencia ganó la toma 0 porque crece mejor.
+   - **Ata la imagen al golpe con una guarda**, para que un cambio de tiempos no lo descuadre en silencio: `if (N_FIN !== 948) throw new Error(…)`, con el fotograma de tu golpe. En la intro de referencia, al meter la voz se movió un acto y la guarda obligó a recolocar el resto sin tocar la marca.
+   - Si al desplazar la toma se queda corta, rehazla desde la toma completa de la caché (no desde el WAV ya recortado) para que llegue al último fotograma.
 3. **Nivela** para que nunca baje a algo que suene a silencio:
    ```
    uv run scripts/nivelar_musica.py take0.wav public/proyecto/musica.wav --curva "0:-28,114:-28,130:-22,726:-22,917:-21" --fin 917
@@ -158,5 +217,6 @@ El usuario lo dijo así: «cuando hay silencio… no sé dónde presta atención
 ## Volumen final
 
 - El vídeo de referencia sale a **-16 LUFS integrados y -3,2 dBTP de pico real**, directamente del render, sin retocar después. Lo miden `scripts/medir.py` o `silencios.py`.
+- La intro de marca en 3D sale a −15 LUFS y −1,2 dBTP sin voz, y a **−14,4 LUFS y −1,6 dBTP con voz**, con la voz a −14 LUFS antes de mezclar.
 - Si el destino pide más volumen (por ejemplo, -14 LUFS y -1 dBTP), sube la voz y la música de forma proporcional, o aplica la ganancia sobre el MP4 y vuelve a medir el pico.
 - No dejes que nada salga a más de -1 dBTP.

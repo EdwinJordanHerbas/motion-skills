@@ -4,16 +4,20 @@
 # ///
 """Genera con tu cuenta de ElevenLabs el paquete de efectos de la plantilla, a partir de su receta.
 
-  uv run paquete_efectos.py <receta.json> <carpeta_salida> [--solo pop,slice] [--cache .cache-elevenlabs]
+  uv run paquete_efectos.py <receta.json> <carpeta_salida> [--solo pop,slice] [--largo 40] [--cache .cache-elevenlabs] [--informe ruta.json]
 
 Por cada efecto pide 3 tomas (con la influencia de la receta, 0,15 menos y 0,15 más), las filtra
 según su familia y las criba por medida: duración activa, energía bajo 150 Hz (retumba) y sobre
 6 kHz (chirría). Entre las que pasan, en los clics y los golpes gana el ataque más rápido y corto.
 La elegida se recorta, lleva fundidos y se normaliza a 0,89 de pico. El tecleo se corta en teclas
-sueltas (tecla0.wav…) con cortar_teclas.py. Al final deja informe.json con las medidas de cada toma.
+sueltas (tecla0.wav…) con cortar_teclas.py. Los fondos con `"bucle": true` (familia bed) se piden a ElevenLabs
+como bucle sin costuras y se alargan a `--largo` segundos (por defecto 40) con fundidos cruzados de 0,25 s, para tener
+un solo archivo para todo el vídeo. Al final deja informe.json con las medidas de cada toma en la carpeta de la caché
+(o en --informe), no junto a los WAV: lleva rutas del ordenador y la salida suele ser public/, que va al repositorio.
 
-Cada petición se guarda en la caché, así que repetir no vuelve a cobrar. Las 3 tomas de los 20
-efectos suman unos 60 s de audio generado: antes, mira tus créditos con `elevenlabs.py plan`.
+Cada petición se guarda en la caché, así que repetir no vuelve a cobrar. Las 3 tomas de los 33
+efectos suman unos 115 s de audio generado (60 s los 20 de interfaz y 55 s los 13 de objetos y ambiente):
+antes, mira tus créditos con `elevenlabs.py plan`, o genera solo los que vayas a usar con --solo.
 Usa ffmpeg para leer y filtrar.
 """
 from __future__ import annotations
@@ -38,6 +42,7 @@ REGLAS = {
     'hit': {'max_activa': 0.9, 'max_graves': 0.40, 'max_agudos': 0.50, 'seco': True},
     'air': {'max_activa': 1.8, 'max_graves': 0.35, 'max_agudos': 0.50, 'seco': False},
     'swell': {'max_activa': 1.3, 'max_graves': 0.30, 'max_agudos': 0.50, 'seco': False},
+    'bed': {'max_activa': 1e9, 'max_graves': 0.60, 'max_agudos': 0.40, 'seco': False},  # fondo continuo: sin límite de duración
 }
 # Los móviles no dan nada por debajo de 150-200 Hz, y el aire por encima de 11 kHz en un barrido solo suma siseo.
 FILTROS = {
@@ -45,6 +50,7 @@ FILTROS = {
     'hit': 'highpass=f=120,lowpass=f=14000,highshelf=f=9000:g=-3',
     'air': 'highpass=f=170,lowpass=f=11000',
     'swell': 'highpass=f=200,lowpass=f=12000',
+    'bed': 'highpass=f=90,lowpass=f=9000',
 }
 
 
@@ -108,8 +114,20 @@ def fundidos(x: np.ndarray, entrada_ms: float, salida_ms: float) -> np.ndarray:
     return y
 
 
+def alargar(y: np.ndarray, segundos: float, cruce: float = 0.25) -> np.ndarray:
+    """Repite un bucle con fundido cruzado hasta cubrir `segundos`."""
+    n, x = int(segundos * SR), int(cruce * SR)
+    w = np.linspace(0, 1, x)[:, None]
+    salida = y.copy()
+    while len(salida) < n:
+        salida = np.concatenate([salida[:-x], salida[-x:] * (1 - w) + y[:x] * w, y[x:]])
+    return salida[:n]
+
+
 def toma(ef: dict, influencia: float, k: int, cache: Path, modelo: str) -> Path:
     cuerpo = {'text': ef['prompt'], 'duration_seconds': round(max(0.5, min(ef['segundos'], 30)), 2), 'prompt_influence': influencia, 'model_id': modelo}
+    if ef.get('bucle'):
+        cuerpo['loop'] = True
     f = el.cache(cache, 'efecto', {**cuerpo, 'toma': k}, 'mp3')  # la misma caché que `elevenlabs.py efecto`
     if not f.exists():
         f.write_bytes(el.pedir('POST', '/v1/sound-generation', cuerpo, {'output_format': 'mp3_44100_128'}))
@@ -121,7 +139,9 @@ def main():
     ap.add_argument('receta')
     ap.add_argument('salida')
     ap.add_argument('--solo', default='', help='nombres separados por comas')
+    ap.add_argument('--largo', type=float, default=40.0, help='segundos a los que se alargan los fondos en bucle')
     ap.add_argument('--cache', default='.cache-elevenlabs')
+    ap.add_argument('--informe', default='', help='dónde dejar informe.json (por defecto, en la carpeta de la caché)')
     a = ap.parse_args()
     receta = json.loads(Path(a.receta).read_text(encoding='utf-8'))
     modelo = receta.get('modelo', 'eleven_text_to_sound_v3')
@@ -146,6 +166,8 @@ def main():
         seco = REGLAS[ef['familia']]['seco']
         if seco:
             y = y[max(0, mejor['medidas']['ataque'] - int(0.004 * SR)):]
+        if ef.get('bucle'):
+            y = alargar(y, a.largo)
         y = fundidos(y, 2 if seco else 15, 40)
         y *= 0.89 / (np.abs(y).max() + 1e-9)
         if ef.get('cortar'):
@@ -160,7 +182,9 @@ def main():
         aviso = '' if validas else '  <- ninguna toma pasa la criba: escúchala o genera otra (--toma en elevenlabs.py)'
         print(f"{hecho:22} toma {mejor['toma']}, {mejor['medidas']['activa_s']} s{aviso}")
         informe[nombre] = {'elegida': mejor['toma'], 'tomas': cands}
-    (dst / 'informe.json').write_text(json.dumps(informe, ensure_ascii=False, indent=2), encoding='utf-8')
+    ruta_informe = Path(a.informe) if a.informe else cache / 'informe.json'
+    ruta_informe.parent.mkdir(parents=True, exist_ok=True)
+    ruta_informe.write_text(json.dumps(informe, ensure_ascii=False, indent=2), encoding='utf-8')
 
 
 if __name__ == '__main__':

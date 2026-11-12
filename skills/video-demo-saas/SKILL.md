@@ -1,10 +1,10 @@
 ---
 name: video-demo-saas
-description: Método para hacer vídeos demo verticales de un SaaS o servicio (1080×1920, 25-35 s) con aspecto de producto profesional, en Remotion y three.js. Dispositivos 3D modelados en código con la interfaz real y nítida, rótulos legibles sin sonido, neumorfismo, transiciones conectadas, apariciones «mágicas», un móvil que gira y suelta monedas 3D, voz opcional, y efectos y música de ElevenLabs sin silencios muertos. Incluye una plantilla completa sin voz que se rellena con un archivo de ajustes, la receta de 27 efectos de interfaz y scripts para generarlos, medir volumen y silencios, nivelar la música y cortar teclas. Úsala cuando el usuario pida un vídeo demo, un anuncio vertical, un reel o un short de su producto, una explicación animada de una app o una web, o un vídeo para captar clientes, aunque no diga «Remotion» ni «3D». También sirve para revisar uno o para hacer solo su sonido (voz, efectos o música).
+description: Método para hacer vídeos demo verticales de un SaaS o servicio (1080×1920, 25-35 s) con aspecto de producto profesional, en Remotion y three.js. Dispositivos 3D modelados en código con la interfaz real y nítida, rótulos legibles sin sonido, neumorfismo, transiciones conectadas, apariciones «mágicas», un móvil que gira y suelta monedas 3D, voz opcional, y efectos y música de ElevenLabs sin silencios muertos. Incluye una plantilla completa sin voz que se rellena con un archivo de ajustes, la receta de 40 efectos (27 de interfaz y 13 de objetos y ambiente) y scripts para generarlos, medir volumen, picos y silencios, nivelar la música, cortar teclas y comprobar cómo pronuncia la voz una marca. Úsala cuando el usuario pida un vídeo demo, un anuncio vertical, un reel o un short de su producto, una explicación animada de una app o una web, o un vídeo para captar clientes, aunque no diga «Remotion» ni «3D». También sirve para revisar uno o para hacer solo su sonido (voz, efectos o música).
 license: Apache-2.0
 compatibility: Proyecto Remotion 4 con three.js, Node.js, uv (Python 3.10+) y ffmpeg. El sonido con ElevenLabs es opcional y necesita red y una clave propia. Solo se ha probado en Windows.
 metadata:
-  version: "0.2.0"
+  version: "0.3.0"
 ---
 
 # Vídeo demo SaaS vertical
@@ -67,12 +67,15 @@ scripts/
   huecos.py           fotogramas rotos: fondo en blanco o un objeto 3D que falta un fotograma
   empalme.py          alarga un acto sin regenerar la música: repite un compás entero en el tiempo más parecido
   claridad.py         casting de voz: qué toma se entiende mejor bajo la música del vídeo y cuál tiene las eses afiladas
-assets/sonidos/       receta.json: los 27 efectos de interfaz por generar (volúmenes en references/sonido.md)
+  picos.py            pico real por fotograma de un MP4 o un WAV: dónde está y qué se suma ahí
+  desfases.py         dónde cae el pico de cada efecto, para que el golpe coincida con su fotograma
+  vocal_e.py          ¿la voz dice «Estudio» o «Studio»? Mide la «e» antes de la /s/ (Whisper no la distingue)
+assets/sonidos/       receta.json: los 40 efectos por generar, 27 de interfaz y 13 de objetos y ambiente (volúmenes en references/sonido.md)
 assets/codigo/        la plantilla y sus piezas (ver LEEME.md)
   Plantilla.tsx       la composición completa sin voz: chat, marca, portátil, móviles, feed, giro con monedas, revisión, informe y formulario
   ajustes.ts          lo único que hay que rellenar: marca, color, tipografía, textos, capturas y sonido
   kit-plantilla.tsx   colores, tipografías, curvas y p()/mix()
-  mundo3d.ts          portátil, móviles y monedas en three.js, con lienzos con margen
+  mundo3d.ts          portátil, móviles y monedas en three.js, con lienzos con margen y la silueta del móvil para recortar pantallas
   timeline.json       duración y tramos de música de la plantilla; plan-musica.json, el plan para ElevenLabs
 assets/leccion.md     plantilla de lección (la misma que lecciones/PLANTILLA.md del repositorio)
 ```

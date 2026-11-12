@@ -64,6 +64,17 @@ La interfaz es HTML normal: tablas, chips, tipografías. Se pega al cuadriláter
 - `quadDe(pose, w, h, z)` proyecta un rectángulo del plano local z de un objeto (la cara del móvil), y `quadPantalla(l)` la pantalla del portátil, siguiendo el giro de la tapa.
 - La interfaz encima lleva un brillo en diagonal que depende del giro (`linear-gradient(115 + ry·2 deg, …)`), para que parezca cristal.
 - **Orden de capas:** el DOM va por encima del lienzo. Si un objeto 3D tiene que pasar por delante de una tarjeta DOM (los móviles posándose en la revisión), esa tarjeta se pone **antes** del lienzo en el árbol. Si una pantalla DOM no debe tapar a un objeto 3D que pasa delante, se apaga antes de que se crucen.
+- **Si tienen que verse los dos a la vez** (un móvil delante de la pantalla encendida del portátil), recorta la pantalla DOM con la silueta del objeto. En una intro de marca 3D, la pantalla del portátil tapaba el cuerpo del móvil que tenía delante: se veía sin marco arriba y a la izquierda. `siluetaMovil(pose)` (en `mundo3d.ts`) proyecta las esquinas redondeadas de la cara y de la trasera del móvil y devuelve su envolvente convexa; la pantalla se recorta restándola con `clip-path: path(evenodd, …)`. Con la cara sola no basta: al girar, el canto asoma por fuera. Compruébalo en los fotogramas en que se cruzan.
+  ```tsx
+  const RecorteMovil = ({m, children}: {m?: Pose; children: React.ReactNode}) => {
+    if (!m) return <>{children}</>;
+    const sil = siluetaMovil(m).map(([x, y]) => `${x.toFixed(2)} ${y.toFixed(2)}`).join(' L');
+    const d = `M-10 -10H${W + 10}V${H + 10}H-10Z M${sil} Z`; // todo el cuadro menos el móvil
+    return <div style={{position: 'absolute', inset: 0, clipPath: `path(evenodd, "${d}")`}}>{children}</div>;
+  };
+  // <RecorteMovil m={movilDelante ? poseMovil : undefined}><Mapped quad={quadPantalla(estado)} …>…</Mapped></RecorteMovil>
+  ```
+  Si cambias el radio de las esquinas o el grosor del cuerpo del móvil, pásalos también a `siluetaMovil(pose, radio, grosor)`.
 
 ## Entrada del portátil (la que no se ve cortada)
 

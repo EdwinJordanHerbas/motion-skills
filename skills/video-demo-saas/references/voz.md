@@ -29,10 +29,13 @@ Plantilla de frases, con su pausa previa (`gap`, en fotogramas) y su intención.
   - las eses: la energía entre 4,5 y 8 kHz. Por encima del 3 % suena afilada y cansa (también la da `claridad.py`);
   - en una voz femenina clara, un tono medio de 200-230 Hz. Por debajo de 190 Hz suena más pesada.
 - **Una puntuación automática no basta para elegir voz.** Si sus componentes son percentiles dentro del lote, premian quedar en el medio, no ser mejor. Decide de oído entre las dos o tres primeras.
+- **Para que el usuario elija de oído**, graba en cada voz las mismas frases del vídeo, nivélalas igual y mándale un MP4 por voz con una tarjeta de título con su nombre, más uno con todas seguidas. Los WAV sueltos no le sirvieron a un usuario: pidió los MP4 para descargarlos.
 - **Comprueba que la voz se puede usar comercialmente** con el plan que tengas. Las voces de la biblioteca tienen condiciones propias.
 - **Modelo `eleven_v4`** con `language_code: es`. Es el más expresivo, pero no controla la velocidad. La alternativa estable es `eleven_multilingual_v2`.
 - **Estabilidad 0,55**, con tomas a 0,45, 0,5, 0,55 y 0,6. Pide 4 tomas por frase y elige la que suene más natural y quepa en su hueco.
-- **Etiquetas** como `[warmly]`, una como mucho: a veces las lee en voz alta.
+- **Etiquetas** como `[warmly]`, una como mucho por frase: a veces las lee en voz alta.
+- **Un tono por escena**, no la misma etiqueta en todas las frases. En una intro de marca con nueve frases funcionó este reparto: `[confident]` para la marca, las cifras y el cierre; `[cheerfully]` para lo que sorprende (la web que reserva sola); `[warmly]` para lo cercano y la llamada a la acción; `[calm]` para lo automático; `[proudly]` para un cliente real. Una voz clonada puede responder menos a las etiquetas que una de la biblioteca: escucha que el tono cambie de verdad entre escenas antes de dar el reparto por bueno.
+- **Rehaz solo las frases que cambian.** Si mandas el texto de las frases vecinas (`previous_text`, `next_text`) para que la entonación tenga continuidad, cambiar el texto de una frase cambia también las peticiones de sus vecinas: si las regeneras todas, se pagan otra vez y salen tomas distintas de las que el usuario ya aprobó.
 - **Comprueba que la pregunta sube.** Mide el tono en la última vocal con voz de la pregunta, no en el final de la palabra: una palabra que acaba en -s sorda no tiene tono. En el vídeo de referencia, la toma con mejores puntos no subía (−0,8 semitonos) y otra subía +7,6. Las etiquetas como `[confident]` aplanan las preguntas.
 - **Números y siglas:** escríbelos como se dicen si los lee la voz. En pantalla pueden ir en cifra («48 h»).
 
@@ -62,7 +65,18 @@ Como la imagen lee esos fotogramas, cambiar una frase mueve la animación sola. 
 
 La imagen de la plantilla no depende de ninguna voz. Si se la añades, no encadenes las frases: pon en cada una `at`, el fotograma de su evento (una constante de `Plantilla.tsx`, como `MARCA_AT` o `REV`), y coloca ahí su primer sonido sin mover la imagen. Cada frase dice su rótulo. Si dos frases quedan pegadas (menos de unos 10 fotogramas entre ellas), quita una y deja ese rótulo para leerlo en silencio.
 
-**Mezcla:** la música baja unos 8 dB bajo cada frase (0,4 de volumen, con rampas de 6 y 10 fotogramas) y los efectos un 30 %. Con la voz a −14 LUFS queda unos 9 dB por encima de la música. Si quieres avisar en pantalla de que la voz es generada, `Lockup` acepta una `nota` («Voz generada con IA»).
+**Mezcla:** la música baja unos 8 dB bajo cada frase (0,4 de volumen, con rampas de 6 y 10 fotogramas) y los efectos un 30 %. Con la voz a −14 LUFS queda unos 9 dB por encima de la música.
+
+- **Aparta la música desde el primer sonido de la frase** (`from`, el inicio real del habla), no desde su primera palabra alineada: la alineación puede llegar tarde. En una intro de referencia, un nombre sonaba 7 fotogramas antes de lo que decía su palabra alineada, la música aún no se había apartado y el pico subió a +0,1 dBTP. Si la frase final cae sobre la cola del golpe de la música, apártala a medias (0,5) y baja esa frase 1,4 dB: apartarla entera dejó un silencio de 10 fotogramas y no apartarla pasaba de −1 dBTP.
+- **Con voz, la voz manda en los tiempos.** Al meter la voz en un vídeo montado sin ella, un acto puede quedarse corto para su frase. Ajusta ese acto y deja apuntados los dos juegos de tiempos (con voz y sin voz), con un interruptor (`CON_VOZ`), porque el usuario puede pedir volver atrás. Si quieres avisar en pantalla de que la voz es generada, `Lockup` acepta una `nota` («Voz generada con IA»).
+
+## Marcas que se dicen en español
+
+Si la marca se escribe con una palabra inglesa (por ejemplo, «<Nombre>Studio»), la voz la leerá en inglés. Si el usuario la quiere en español, el texto de la voz lleva la palabra española (`"text": "<Nombre> Estudio."`) y la pantalla sigue con la marca como se escribe.
+
+- **Whisper no sirve para comprobarlo.** Con marcas que conoce, normaliza lo que oye y escribe «Studio» aunque la voz diga «Estudio».
+- **Mídelo con los formantes:** `uv run scripts/vocal_e.py voz/marca.wav voz/cierre.wav`. Busca la /s/ y mide cuánto dura antes un tramo sonoro con el segundo formante por encima de 1.800 Hz, que es la «e». Las tomas que dicen «Estudio» dieron 95-135 ms; las que decían «Studio», 25-55 ms. Ante un «dudoso», escucha.
+- Vale para cualquier palabra española que empiece por «es» y que la voz pueda leer en inglés.
 
 ## Palabras del guion → fotogramas
 
@@ -83,5 +97,6 @@ Indexa por posición en el guion (`palabras('explica')[10]` es la undécima pala
 ## Antes de dar la voz por buena
 
 - Escucha las preguntas: la entonación tiene que subir. Si no sube en ninguna toma, avisa al usuario en lugar de esconderlo.
-- Comprueba que el nombre de marca se entiende.
+- Comprueba que el nombre de marca se entiende, y que se dice como pide el usuario (`scripts/vocal_e.py` si lleva una «e» española).
+- Saca el pico por fotograma con `scripts/picos.py`: si un pico cae al principio de una frase, la música no se apartó a tiempo.
 - Al publicar, el vídeo se marca como hecho con IA en la plataforma. No hace falta rotularlo en pantalla si el usuario no lo pide.

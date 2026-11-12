@@ -94,6 +94,43 @@ export const MOVIL = {w: 330, h: 700, pantalla: {w: 304, h: 674}, frente: 13.4};
 /** Signed area of a screen quad: positive while its front faces the camera. */
 export const area = (q: Quad) => q.reduce((s, [x, y], i) => s + x * q[(i + 1) % 4][1] - q[(i + 1) % 4][0] * y, 0) / 2;
 
+/** Convex hull (monotone chain) of screen points. */
+const casco = (pts: [number, number][]) => {
+  const s = [...pts].sort((a, b) => a[0] - b[0] || a[1] - b[1]);
+  const cruz = (o: [number, number], a: [number, number], b: [number, number]) => (a[0] - o[0]) * (b[1] - o[1]) - (a[1] - o[1]) * (b[0] - o[0]);
+  const mitad = (lista: [number, number][]) => {
+    const r: [number, number][] = [];
+    for (const q of lista) {
+      while (r.length >= 2 && cruz(r[r.length - 2], r[r.length - 1], q) <= 0) r.pop();
+      r.push(q);
+    }
+    return r.slice(0, -1);
+  };
+  return [...mitad(s), ...mitad([...s].reverse())];
+};
+/**
+ * Screen silhouette of the phone body: the hull of the rounded corners of its front and its back (with the front
+ * alone, the edge pokes out while it turns). Use it to cut a DOM screen that a 3D phone passes in front of.
+ */
+export const siluetaMovil = (p: Pose, radio = 58, grosor = 26): [number, number][] => {
+  const m = matriz(p);
+  const {w, h} = MOVIL;
+  const esquinas = [
+    [w / 2 - radio, h / 2 - radio, 0],
+    [-w / 2 + radio, h / 2 - radio, 90],
+    [-w / 2 + radio, -h / 2 + radio, 180],
+    [w / 2 - radio, -h / 2 + radio, 270],
+  ] as const;
+  const pts: [number, number][] = [];
+  for (const z of [grosor / 2, -grosor / 2])
+    for (const [cx, cy, a0] of esquinas)
+      for (let k = 0; k <= 6; k++) {
+        const a = rad(a0 + 15 * k);
+        pts.push(aPantalla(new THREE.Vector3(cx + radio * Math.cos(a), cy + radio * Math.sin(a), z).applyMatrix4(m)));
+      }
+  return casco(pts);
+};
+
 /* ---------- helpers ---------- */
 
 const losa = (w: number, h: number, r: number, grosor: number, bisel: number) => {

@@ -42,7 +42,7 @@ La plantilla no tiene voz y funciona en silencio hasta que le das música y efec
 
 - La música tiene sus propios [términos](https://elevenlabs.io/music-terms), con límites por tipo de cuenta y de uso.
 - Sin ElevenLabs, usa tus propios sonidos y una música con licencia. Las reglas de mezcla y de silencios valen igual.
-- **Los efectos no vienen como audio**, porque los términos de ElevenLabs no permiten repartir lo generado. Viene su receta (`assets/sonidos/receta.json`) y un script que genera los 27 con tu clave:
+- **Los efectos no vienen como audio**, porque los términos de ElevenLabs no permiten repartir lo generado. Viene su receta (`assets/sonidos/receta.json`) y un script que genera los 40 (27 de interfaz y 13 de objetos y ambiente) con tu clave. Con `--solo pop,slice` generas solo los que vayas a usar:
   ```bash
   uv run scripts/paquete_efectos.py assets/sonidos/receta.json public/<proyecto>/sfx
   ```
