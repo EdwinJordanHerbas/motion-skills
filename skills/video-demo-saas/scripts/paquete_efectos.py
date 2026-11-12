@@ -4,7 +4,7 @@
 # ///
 """Genera con tu cuenta de ElevenLabs el paquete de efectos de la plantilla, a partir de su receta.
 
-  uv run paquete_efectos.py <receta.json> <carpeta_salida> [--solo pop,slice] [--cache .cache-elevenlabs]
+  uv run paquete_efectos.py <receta.json> <carpeta_salida> [--solo pop,slice] [--cache .cache-elevenlabs] [--informe ruta.json]
 
 Por cada efecto pide 3 tomas (con la influencia de la receta, 0,15 menos y 0,15 más), las filtra
 según su familia y las criba por medida: duración activa, energía bajo 150 Hz (retumba) y sobre
@@ -13,7 +13,8 @@ La elegida se recorta, lleva fundidos y se normaliza a 0,89 de pico. El tecleo s
 sueltas (tecla0.wav…) con cortar_teclas.py. Los fondos continuos (familia `bed`, como `aire`) se
 piden en bucle (`"bucle": true`) y, con `"alargar_s"`, se repiten con un fundido cruzado de 0,25 s
 hasta cubrir esos segundos: un solo archivo para todo el vídeo. Al final deja informe.json con las
-medidas de cada toma.
+medidas de cada toma en la carpeta de la caché (o en --informe), no junto a los WAV: lleva rutas del
+ordenador, y la salida suele ser public/, que va al repositorio.
 
 Cada petición se guarda en la caché, así que repetir no vuelve a cobrar. Las 3 tomas de los 34
 efectos de la receta suman unos 120 s de audio generado: antes, mira tus créditos con
@@ -145,6 +146,7 @@ def main():
     ap.add_argument('salida')
     ap.add_argument('--solo', default='', help='nombres separados por comas')
     ap.add_argument('--cache', default='.cache-elevenlabs')
+    ap.add_argument('--informe', default='', help='dónde dejar informe.json (por defecto, en la carpeta de la caché)')
     a = ap.parse_args()
     receta = json.loads(Path(a.receta).read_text(encoding='utf-8'))
     modelo = receta.get('modelo', 'eleven_text_to_sound_v3')
@@ -185,7 +187,10 @@ def main():
         aviso = '' if validas else '  <- ninguna toma pasa la criba: escúchala o genera otra (--toma en elevenlabs.py)'
         print(f"{hecho:22} toma {mejor['toma']}, {mejor['medidas']['activa_s']} s{aviso}")
         informe[nombre] = {'elegida': mejor['toma'], 'tomas': cands}
-    (dst / 'informe.json').write_text(json.dumps(informe, ensure_ascii=False, indent=2), encoding='utf-8')
+    # el informe lleva rutas del ordenador: nunca junto a los WAV, que suelen estar en public/
+    ruta_informe = Path(a.informe) if a.informe else cache / 'informe.json'
+    ruta_informe.parent.mkdir(parents=True, exist_ok=True)
+    ruta_informe.write_text(json.dumps(informe, ensure_ascii=False, indent=2), encoding='utf-8')
 
 
 if __name__ == '__main__':

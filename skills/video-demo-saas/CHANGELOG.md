@@ -1,5 +1,9 @@
 # Cambios de video-demo-saas
 
+## 0.3.1 · 12 nov 2026
+
+- **`informe.json` ya no se guarda junto a los efectos.** `paquete_efectos.py` lo dejaba en la carpeta de salida, que suele ser `public/` y va al repositorio, y el informe lleva rutas del ordenador. Ahora se guarda en la carpeta de la caché, o donde digas con `--informe`. El arreglo viene del [PR #2](https://github.com/EdwinJordanHerbas/motion-skills/pull/2).
+
 ## 0.3.0 · 12 nov 2026
 
 Lo aprendido al hacer con la skill la intro 3D de NeumorStudio (33,6 s): un mundo 3D en un solo plano, con voz de marca.

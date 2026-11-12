@@ -93,7 +93,7 @@ Mira la hoja de contacto de verdad, fotograma a fotograma, buscando cortes, fant
 | Pico de −0,43 dBTP en el cierre (intro 3D con voz) | El aire a la velocidad máxima de la cámara sobre un golpe de la música. Quitar efectos sueltos no lo arregló | Techo del aire de 0,2 a 0,14; buscar la capa culpable con `scripts/picos.py` |
 | La voz dice la marca en inglés y el usuario la quiere en español | El texto de la voz llevaba la marca escrita como en pantalla | Escribir la palabra española en el texto de la voz, rehacer solo esas frases y comprobar la «e» con `scripts/vocal_e.py` (Whisper no la distingue) |
 | «Quita el EJEMPLO» de una pantalla inventada (usuario, intro 3D) | Decisión del usuario para ese vídeo | Quitarlo y dejarlo escrito con fecha en el código y en el README. La regla no cambia: en el siguiente vídeo, el sello va puesto salvo que el usuario diga otra cosa |
-| Un informe JSON con rutas absolutas del ordenador iba a entrar en el commit, dentro de `public/` | El generador de efectos escribía su informe junto a los WAV | Informes fuera de `public/` y del repositorio (en `out/`, por ejemplo); en `public/` solo lo que se sirve |
+| Un informe JSON con rutas absolutas del ordenador iba a entrar en el commit, dentro de `public/` | El generador de efectos escribía su informe junto a los WAV | Informes fuera de `public/` y del repositorio: `paquete_efectos.py` lo deja en la carpeta de la caché (0.3.1). En `public/` solo lo que se sirve |
 
 ## Antes de entregar
 

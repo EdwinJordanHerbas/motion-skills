@@ -49,7 +49,7 @@ La plantilla no tiene voz y funciona en silencio hasta que le das música y efec
 
 ## Novedades
 
-La versión actual es la **0.3.0**. Trae lo aprendido en la intro 3D de NeumorStudio: sonido inmersivo, voz con un tono por escena, la marca dicha en español y tres scripts de medida nuevos. Todos los cambios, versión a versión, están en [CHANGELOG.md](CHANGELOG.md).
+La versión actual es la **0.3.1**. La 0.3 trae lo aprendido en la intro 3D de NeumorStudio: sonido inmersivo, voz con un tono por escena, la marca dicha en español y tres scripts de medida nuevos. Todos los cambios, versión a versión, están en [CHANGELOG.md](CHANGELOG.md).
 
 ## Pruebas
 
