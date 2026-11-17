@@ -1,10 +1,10 @@
 ---
 name: video-demo-saas
-description: Método para hacer vídeos demo verticales de un SaaS o servicio (1080×1920, 25-35 s) con aspecto de producto profesional, en Remotion y three.js. Dispositivos 3D modelados en código con la interfaz real y nítida, rótulos legibles sin sonido, neumorfismo, transiciones conectadas, apariciones «mágicas», un móvil que gira y suelta monedas 3D, voz opcional, y efectos y música de ElevenLabs sin silencios muertos. Incluye una plantilla completa sin voz que se rellena con un archivo de ajustes, la receta de 41 efectos (interfaz, objetos y ambiente), un sonido inmersivo para mundos 3D y scripts para generarlos, medir volumen, picos y silencios, nivelar la música, cortar teclas y comprobar cómo pronuncia la voz una marca. Úsala cuando el usuario pida un vídeo demo, un anuncio vertical, un reel o un short de su producto, una explicación animada de una app o una web, o un vídeo para captar clientes, aunque no diga «Remotion» ni «3D». También sirve para revisar uno o para hacer solo su sonido (voz, efectos o música).
+description: Método para hacer vídeos verticales de producto (1080×1920, 25-35 s) con aspecto profesional, en Remotion y three.js: demos de un SaaS o servicio, intros de marca y muestrarios de interfaz. Dispositivos 3D modelados en código con la interfaz real y nítida, rótulos legibles sin sonido, transiciones conectadas, voz opcional, y efectos y música de ElevenLabs sin silencios muertos. Incluye una plantilla sin voz que se rellena con un archivo de ajustes, un kit de estilo premium, un kit de elementos de interfaz, la receta de 41 efectos, sonido inmersivo para mundos 3D y scripts para generarlos, medir volumen, picos, silencios y parpadeos, nivelar la música y desglosar una referencia. Úsala cuando el usuario pida un vídeo demo, un anuncio vertical, un reel o un short de su producto, una intro o presentación animada, una explicación animada de una app o una web, o un vídeo para captar clientes, aunque no diga «Remotion» ni «3D». También sirve para revisar uno o para hacer solo su sonido (voz, efectos o música).
 license: Apache-2.0
 compatibility: Proyecto Remotion 4 con three.js, Node.js, uv (Python 3.10+) y ffmpeg. El sonido con ElevenLabs es opcional y necesita red y una clave propia. Solo se ha probado en Windows.
 metadata:
-  version: "0.3.1"
+  version: "0.4.0"
 ---
 
 # Vídeo demo SaaS vertical
@@ -23,6 +23,8 @@ Lee la referencia de cada paso solo cuando llegues a él:
 | Portátil y móviles 3D, pantallas nítidas, cámara, móvil inclinado con feed, giro y dinero | `references/imagen-3d.md` |
 | **Atención y recorrido del ojo**: un foco cada vez, rótulos junto a su objeto, iconos reconocibles sin logotipos ajenos | `references/atencion-ojo.md` |
 | Rótulos de producto, magia («¡pum!»), neumorfismo, transiciones conectadas, cursor | `references/transiciones-estilo.md` |
+| **Estilo premium** para presentaciones, intros y anuncios propios: fondos de foto, aura pastel, sans y cursiva serif con palabra en degradado, pastillas de cristal, semitono y planeta. Y cómo analizar un vídeo de referencia | `references/estilo-premium.md` |
+| **Elementos de interfaz del mercado** replicados en código (interruptor, deslizador, segmentado, botón con estados, isla, notificaciones, calendario, contador, anillos, gráficos, paleta ⌘K…): catálogo, cómo se mueve cada uno, el toque conductor y el marco con el nombre | `references/elementos-ui.md` |
 | Voz: modelo, elección de voz, tono por escena, marcas en español, tomas, colocación y palabras a fotogramas | `references/voz.md` |
 | Efectos, paquete de sonido, sonido inmersivo, música, mezcla en Remotion, picos y silencios | `references/sonido.md` |
 | Render, medidas, hojas de contacto y lista de fallos ya vistos | `references/revision.md` |
@@ -38,7 +40,7 @@ Lee la referencia de cada paso solo cuando llegues a él:
 6. **Movimiento determinista.** Todo es función pura del fotograma: nada de `Math.random()`, `Date` ni estado entre fotogramas.
 7. **Nada cortado ni fantasma.** Un objeto 3D entra entero en el encuadre y gira sobre su centro. Se funde como imagen completa, nunca pieza a pieza, porque entonces se ve por dentro. Revisa siempre los primeros fotogramas de cada entrada.
 8. **Seguridad.** La clave de ElevenLabs solo vive en la variable de entorno `ELEVENLABS_API_KEY`: nunca en archivos, nunca en el chat, nunca impresa. No publiques, no compres, no descargues modelos ni librerías de sonido sin preguntar antes, y no hagas commit sin que el usuario lo pida. Al publicar, el vídeo se marca como hecho con IA en la plataforma.
-9. **Aspecto de producto, no de anuncio.** Tipografía sans de interfaz en minúscula normal, sin palabras de color subrayadas: un cliente las rechazó por «poco profesionales». El estado activo va en tinta y el color de la marca solo en la marca. La emoción sale del movimiento (inclinar, acelerar, girar, aparecer de golpe), no de la tipografía.
+9. **Aspecto de producto, no de anuncio.** Tipografía sans de interfaz en minúscula normal, sin palabras de color subrayadas: un cliente las rechazó por «poco profesionales». El estado activo va en tinta y el color de la marca solo en la marca. La emoción sale del movimiento (inclinar, acelerar, girar, aparecer de golpe), no de la tipografía. Esto vale para demos de producto. En presentaciones, intros y anuncios propios se usa el estilo premium (`references/estilo-premium.md`), con su palabra en degradado y su cursiva. Con un cliente, se le pregunta.
 10. **Un foco cada vez y el ojo guiado.** Nadie puede leer un rótulo arriba y mirar a la vez una animación abajo. El rótulo entra cuando su escena está quieta, va pegado a su objeto (dentro de la cámara, en un sitio distinto en cada escena) y la escena actúa cuando ya se ha leído. Lo nuevo nace donde ya está la mirada o lo trae algo en movimiento. Lee `references/atencion-ojo.md` antes del guion.
 11. **Sin logotipos ajenos.** Para que se reconozcan las redes o el correo, usa el nombre en texto plano e iconos universales, no logotipos de marcas: suelen pedir permiso o prohibir que parezca un respaldo.
 12. **Centrado en lo que se ve.** En el móvil, la red tapa la parte de arriba, la de abajo (el nombre, el texto de la publicación y el botón) y la columna de botones de la derecha. Todo lo que se lee va en la zona segura, **x 65-888, y 288-1248** (Meta y YouTube juntas), y la cámara se ancla en su centro, no en el del cuadro. Compruébalo con `scripts/zonas.py` antes de entregar. Las cifras y las fuentes están en `references/atencion-ojo.md`.
@@ -67,11 +69,15 @@ scripts/
   zonas.py            hoja de contacto con la zona segura de anuncios verticales dibujada encima
   caja.py             ancho y centro del objeto oscuro por fotograma; avisa si toca el borde del cuadro
   huecos.py           fotogramas rotos: fondo en blanco o un objeto 3D que falta un fotograma
+  parpadeo.py         capas que desaparecen un solo fotograma (distinto de sus dos vecinos, que se parecen): lo que huecos.py no ve
   empalme.py          alarga un acto sin regenerar la música: repite un compás entero en el tiempo más parecido
   claridad.py         casting de voz: qué toma se entiende mejor bajo la música del vídeo y cuál tiene las eses afiladas
   picos.py            pico real por fotograma: en qué fotogramas se apila el sonido; --bloques compara pistas
   desfases.py         el pico de cada efecto en fotogramas, que es su desfase
   vocal_e.py          ¿dice «Estudio» o «Studio»? mide la «e» antes de la /s/ (Whisper no la distingue)
+  referencia.py       desglose de un vídeo de referencia: hojas cada N fotogramas, cortes, tempo y nivel
+  fotogramas.py       fotogramas sueltos grandes de un vídeo, para ver tipografía y detalle
+  anchos.py           ancho en px de un texto con la fuente real: ¿cabe en los 823 px de la zona segura?
 assets/sonidos/       receta.json: los 41 efectos por generar, 27 de interfaz y 14 de objetos y ambiente (volúmenes en references/sonido.md)
 assets/codigo/        la plantilla y sus piezas (ver LEEME.md)
   Plantilla.tsx       la composición completa sin voz: chat, marca, portátil, móviles, feed, giro con monedas, revisión, informe y formulario
@@ -81,6 +87,9 @@ assets/codigo/        la plantilla y sus piezas (ver LEEME.md)
   timeline.json       duración y tramos de música de la plantilla; plan-musica.json, el plan para ElevenLabs
   sonido-inmersivo.tsx  extracto de la intro 3D: voz que aparta la música desde su primer sonido, efectos con desfase medido, aire que sigue a la cámara, ambiente cortado por el golpe y mezcla
   recorte-movil.tsx   RecorteMovil: recorta a una pantalla DOM la silueta del móvil 3D que pasa por delante
+  estilo.tsx          kit del estilo premium: Foto, Aura, LlaveCielo, Semitono, enfoque, degradado, rampa, Resalte, Pastilla y Planeta; carga Geist e Instrument Serif
+  ui.tsx              kit de 24 elementos de interfaz replicados del mercado, cada uno función pura de su progreso, más vidrio, Icono, Sello y Logo
+  Interfaces.tsx      vídeo de ejemplo del kit: cinco negocios con su foto y su color, un toque conductor, marcos con el nombre y cierre en bento
 assets/leccion.md     plantilla de lección (la misma que lecciones/PLANTILLA.md del repositorio)
 ```
 
