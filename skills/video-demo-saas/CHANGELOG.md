@@ -1,5 +1,15 @@
 # Cambios de video-demo-saas
 
+## 0.4.0 · 17 nov 2026
+
+Lo aprendido con dos vídeos propios hechos con la skill: una presentación personal en vertical y un muestrario de interfaces.
+
+- **Estilo premium** (`references/estilo-premium.md` y `assets/codigo/estilo.tsx`) para presentaciones, intros y anuncios propios. Fondos de foto y un aura pastel en lugar de degradados planos, con cuatro fotos de Unsplash ya catalogadas. Tipografía en tres pisos: antetítulo gris, palabra gigante en degradado y cursiva serif. Entradas con foco, pastillas de cristal pegadas a su objeto, transición en semitono y cierre con planeta. En las demos de producto sigue mandando el innegociable 9, salvo que el cliente diga que sí.
+- **Kit de elementos de interfaz** (`references/elementos-ui.md` y `assets/codigo/ui.tsx`): 24 elementos de shadcn/ui, Magic UI, Aceternity UI, Liquid Glass y Material 3 Expressive replicados en código, cada uno como función pura de su progreso. La guía dice cómo se mueve cada uno, cómo un solo toque conduce el vídeo y cómo un marco con el nombre presenta cada componente. `assets/codigo/Interfaces.tsx` es un vídeo de ejemplo completo con «Tu marca».
+- **Analizar una referencia:** `scripts/referencia.py` saca hojas de contacto, cortes, tempo y nivel de un vídeo, y `scripts/fotogramas.py`, fotogramas sueltos grandes para ver la tipografía.
+- **Medir antes de maquetar:** `scripts/anchos.py` da el ancho de un texto con la fuente real, para saber si cabe en los 823 px de la zona segura.
+- **Capas que desaparecen un fotograma:** `scripts/parpadeo.py` las encuentra en el render completo, donde `huecos.py` no las ve. La revisión explica cómo rehacer solo ese tramo sin que cambie de color.
+
 ## 0.3.1 · 12 nov 2026
 
 - **`informe.json` ya no se guarda junto a los efectos.** `paquete_efectos.py` lo dejaba en la carpeta de salida, que suele ser `public/` y va al repositorio, y el informe lleva rutas del ordenador. Ahora se guarda en la carpeta de la caché, o donde digas con `--informe`. El arreglo viene del [PR #2](https://github.com/EdwinJordanHerbas/motion-skills/pull/2).

@@ -35,6 +35,7 @@ Puedes rellenarla tú o pedírselo a tu IA con la skill instalada: «hazme un v�
 Además de los comunes:
 
 - **`three` (0.18x) y `@remotion/fonts`** en tu proyecto. La plantilla se ha probado con Remotion 4.0.541 y three 0.181.
+- **Para el kit de estilo premium**, las fuentes Geist e Instrument Serif Italic, las dos con licencia OFL, en `public/fonts/`. De dónde bajarlas: [`assets/codigo/LEEME.md`](assets/codigo/LEEME.md#kits-de-estilo-premium-y-de-elementos-ui).
 
 ## Sonido: opcional
 
@@ -49,7 +50,7 @@ La plantilla no tiene voz y funciona en silencio hasta que le das música y efec
 
 ## Novedades
 
-La versión actual es la **0.3.1**. La 0.3 trae lo aprendido en la intro 3D de NeumorStudio: sonido inmersivo, voz con un tono por escena, la marca dicha en español y tres scripts de medida nuevos. Todos los cambios, versión a versión, están en [CHANGELOG.md](CHANGELOG.md).
+La versión actual es la **0.4.0**. Trae un estilo premium para intros y presentaciones, un kit de 24 elementos de interfaz con un vídeo de ejemplo y cuatro scripts nuevos: parpadeos de un fotograma, desglose de un vídeo de referencia, fotogramas sueltos y ancho de un texto con su fuente. La 0.3 trajo lo aprendido en la intro 3D de NeumorStudio: sonido inmersivo, voz con un tono por escena, la marca dicha en español y tres scripts de medida. Todos los cambios, versión a versión, están en [CHANGELOG.md](CHANGELOG.md).
 
 ## Pruebas
 
